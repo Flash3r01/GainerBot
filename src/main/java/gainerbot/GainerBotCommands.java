@@ -1,6 +1,7 @@
 package gainerbot;
 
 import gainerbot.commands.BaseCommand;
+import gainerbot.commands.Help;
 import gainerbot.commands.Random;
 import gainerbot.commands.Stonks;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -20,6 +21,7 @@ public class GainerBotCommands {
         //Here come all the commands that the Bot knows
         commands.add(new Random());
         commands.add(new Stonks());
+        commands.add(new Help());
 
         //Extract all the commandNames.
         for(BaseCommand command : commands){
