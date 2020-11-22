@@ -48,8 +48,6 @@ public class GainerBot extends ListenerAdapter {
                 .addEventListeners(new GainerBot());
                 //.setCompression(Compression.NONE);
 
-        //TODO add the event listeners.
-
         //TODO add an actual logger.
         try {
             jdaInstance = builder.build();
@@ -79,8 +77,8 @@ public class GainerBot extends ListenerAdapter {
                 String url = "https://lmgtfy.app/?q=" + msg.replace("!google", "").strip().replace("+", "%2B").replace(" ", "+");
                 channel.sendMessage(url).queue();
             }
-        }
 
-        commandManager.processCommandMessage(event);
+            commandManager.processCommandMessage(event);
+        }
     }
 }
