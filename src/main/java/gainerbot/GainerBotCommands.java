@@ -23,6 +23,7 @@ public class GainerBotCommands {
         commands.add(new Test());
         commands.add(new Google());
         commands.add(new Watch2Gether());
+        commands.add(new Nibba());
 
         //Extract all the commandNames.
         for(BaseCommand command : commands){
