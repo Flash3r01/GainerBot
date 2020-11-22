@@ -2,6 +2,7 @@ package gainerbot;
 
 import gainerbot.commands.BaseCommand;
 import gainerbot.commands.Random;
+import gainerbot.commands.Stonks;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import javax.annotation.Nonnull;
@@ -18,6 +19,7 @@ public class GainerBotCommands {
     public GainerBotCommands(){
         //Here come all the commands that the Bot knows
         commands.add(new Random());
+        commands.add(new Stonks());
 
         //Extract all the commandNames.
         for(BaseCommand command : commands){
@@ -42,7 +44,7 @@ public class GainerBotCommands {
                 if(command.equalsIgnoreCase(name)){
                     //Choose if there are options or not.
                     if(tokens.length >= 2){
-                        commands.get(currentCommandIndex).execute(event, Arrays.copyOfRange(tokens, 1, tokens.length-1));
+                        commands.get(currentCommandIndex).execute(event, Arrays.copyOfRange(tokens, 1, tokens.length));
                     }else{
                         commands.get(currentCommandIndex).execute(event, new String[0]);
                     }
