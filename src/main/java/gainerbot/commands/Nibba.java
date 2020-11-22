@@ -12,6 +12,11 @@ public class Nibba extends BaseCommand{
 
     @Override
     public void execute(@Nonnull MessageReceivedEvent event, String[] options) {
-        event.getChannel().sendMessage("Ni:b::b:a").queue();
+        if(options.length > 0){
+            String s = options[0].replace("b", ":b:").replace("B",":b:");
+            event.getChannel().sendMessage(s).queue();
+        }else {
+            event.getChannel().sendMessage("Ni:b::b:a").queue();
+        }
     }
 }
