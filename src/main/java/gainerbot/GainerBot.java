@@ -22,7 +22,7 @@ public class GainerBot extends ListenerAdapter {
 
     public static void startGainerBot(){
         if(jdaInstance != null){
-            //TODO add an error message
+            System.out.println("There is already a GainerBot running.");
             return;
         }
 
@@ -41,7 +41,6 @@ public class GainerBot extends ListenerAdapter {
         }
 
         //Create the Bot Instance
-        //TODO make it read the token from a file.
         JDABuilder builder = JDABuilder.createDefault(token)
                 .setActivity(Activity.listening("Schnapp - Gzuz"))
                 .disableCache(CacheFlag.ACTIVITY)
@@ -69,16 +68,6 @@ public class GainerBot extends ListenerAdapter {
         String msg = event.getMessage().getContentRaw().toLowerCase();
         MessageChannel channel = event.getChannel();
 
-        //TODO Remove these Test-Commands
-        if(channel.getName().toLowerCase().contains("bot")) {
-            if (msg.contains("!test")) {
-                channel.sendMessage("Leave me alone, you KEK!").queue();
-            } else if (msg.contains("!google")) {
-                String url = "https://lmgtfy.app/?q=" + msg.replace("!google", "").strip().replace("+", "%2B").replace(" ", "+");
-                channel.sendMessage(url).queue();
-            }
-
-            commandManager.processCommandMessage(event);
-        }
+        commandManager.processCommandMessage(event);
     }
 }

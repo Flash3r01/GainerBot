@@ -1,14 +1,12 @@
 package gainerbot;
 
-import gainerbot.commands.BaseCommand;
-import gainerbot.commands.Help;
-import gainerbot.commands.Random;
-import gainerbot.commands.Stonks;
+import gainerbot.commands.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class GainerBotCommands {
@@ -22,6 +20,8 @@ public class GainerBotCommands {
         commands.add(new Random());
         commands.add(new Stonks());
         commands.add(new Help());
+        commands.add(new Test());
+        commands.add(new Google());
 
         //Extract all the commandNames.
         for(BaseCommand command : commands){
@@ -35,8 +35,10 @@ public class GainerBotCommands {
 
         if(!msg.startsWith(prefix)) return false;
 
-        //TODO make it possible to use " to allow spaces.
-        String[] tokens = msg.substring(prefix.length()).strip().split(" ");
+        //Channel restriction. Remove if not needed.
+        if(!event.getChannel().getName().contains("bot")) return false;
+
+        String[] tokens = commandToTokens(msg);
         if(tokens.length == 0) return false;
 
         String command = tokens[0];
@@ -59,6 +61,20 @@ public class GainerBotCommands {
         return false;
     }
 
+    private String[] commandToTokens(String msg){
+        String[] quoteSeparated = msg.substring(prefix.length()).strip().split("\"");
+
+        ArrayList<String> tokens = new ArrayList<>();
+        for(int i = 0; i < quoteSeparated.length; i++){
+            if(i%2 == 0){
+                Collections.addAll(tokens, quoteSeparated[i].strip().split(" "));
+            }else{
+                Collections.addAll(tokens, quoteSeparated[i]);
+            }
+        }
+
+        return tokens.toArray(new String[0]);
+    }
 
     //region Getter and Setter
     public String getPrefix() {
