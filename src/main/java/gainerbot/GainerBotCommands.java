@@ -70,6 +70,7 @@ public class GainerBotCommands {
         return false;
     }
 
+    //TODO Mentions could be a problem, because of spaces...
     private String[] commandToTokens(String msg){
         String[] quoteSeparated = msg.substring(prefix.length()).strip().split("\"");
 

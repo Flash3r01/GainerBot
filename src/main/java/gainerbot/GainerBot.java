@@ -3,8 +3,11 @@ package gainerbot;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.annotation.Nonnull;
@@ -42,10 +45,14 @@ public class GainerBot extends ListenerAdapter {
             System.out.println("Could not read the Token from the File.");
         }
 
+        MemberCachePolicy policy = MemberCachePolicy.ALL;
+
         //Create the Bot Instance
         JDABuilder builder = JDABuilder.createDefault(token)
                 .setActivity(Activity.listening("Schnapp - Gzuz"))
                 .disableCache(CacheFlag.ACTIVITY)
+                .enableIntents(GatewayIntent.GUILD_MEMBERS)
+                .setMemberCachePolicy(policy)
                 .addEventListeners(new GainerBot());
                 //.setCompression(Compression.NONE);
 
@@ -61,6 +68,9 @@ public class GainerBot extends ListenerAdapter {
         } catch (InterruptedException e) {
             e.printStackTrace();
             System.out.println("A needed Thread was interrupted.");
+        }
+        for(Guild guild : jdaInstance.getGuilds()){
+            guild.loadMembers().onSuccess(list -> System.out.println("Members loaded"));
         }
         System.out.println("GainerBot started.");
     }
