@@ -8,7 +8,7 @@ public enum GainerBotConfiguration {
     instance;
 
     //Command Stuff
-    public static String prefix = "!";
+    public static String prefix = "!!";
 
 
     //Paths
