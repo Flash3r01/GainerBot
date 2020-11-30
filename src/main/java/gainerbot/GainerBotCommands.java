@@ -1,6 +1,7 @@
 package gainerbot;
 
 import gainerbot.commands.*;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import javax.annotation.Nonnull;
@@ -24,6 +25,7 @@ public class GainerBotCommands {
         commands.add(new Google());
         commands.add(new Watch2Gether());
         commands.add(new Nibba());
+        commands.add(new Fuck());
         commands.add(new OWOifier());
 
         //Extract all the commandNames.
@@ -35,6 +37,7 @@ public class GainerBotCommands {
 
     public boolean processCommandMessage(@Nonnull MessageReceivedEvent event){
         String msg = event.getMessage().getContentRaw();
+        MessageChannel channel = event.getChannel();
 
         if(!msg.startsWith(prefix)) return false;
 
@@ -44,18 +47,25 @@ public class GainerBotCommands {
         String[] tokens = commandToTokens(msg);
         if(tokens.length == 0) return false;
 
-        String command = tokens[0];
+        String commandString = tokens[0];
         int currentCommandIndex = 0;
         for(String[] names : commandNames){
             for(String name : names){
-                if(command.equalsIgnoreCase(name)){
-                    //Choose if there are options or not.
-                    if(tokens.length >= 2){
-                        commands.get(currentCommandIndex).execute(event, Arrays.copyOfRange(tokens, 1, tokens.length));
+                if(commandString.equalsIgnoreCase(name)){
+                    BaseCommand command = commands.get(currentCommandIndex);
+
+                    if(command.listensOnChannel(channel.getName())) {
+                        //Choose if there are options or not.
+                        if (tokens.length >= 2) {
+                            command.execute(event, Arrays.copyOfRange(tokens, 1, tokens.length));
+                        } else {
+                            command.execute(event, new String[0]);
+                        }
+                        return true;
                     }else{
-                        commands.get(currentCommandIndex).execute(event, new String[0]);
+                        return false;
                     }
-                    return true;
+
                 }
             }
             currentCommandIndex++;
@@ -64,6 +74,7 @@ public class GainerBotCommands {
         return false;
     }
 
+    //TODO Mentions could be a problem, because of spaces...
     private String[] commandToTokens(String msg){
         String[] quoteSeparated = msg.substring(prefix.length()).strip().split("\"");
 
