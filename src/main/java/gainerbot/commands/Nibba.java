@@ -1,6 +1,7 @@
 package gainerbot.commands;
 
 import gainerbot.GainerBotConfiguration;
+import gainerbot.permissions.IChannelPermission;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import javax.annotation.Nonnull;
@@ -8,6 +9,7 @@ import javax.annotation.Nonnull;
 public class Nibba extends BaseCommand{
     public Nibba() {
         super(new String[]{"nibba"}, "changes b to :b:");
+        listeningChannels = IChannelPermission.Presets.getChatPermissions();
     }
 
     @Override

@@ -1,11 +1,13 @@
 package gainerbot.commands;
 
+import gainerbot.permissions.IChannelPermission;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class OWOifier extends BaseCommand{
     public OWOifier() {
         super(new String[]{"owo", "OwO", "OWO"}, "UwU");
+        listeningChannels = IChannelPermission.Presets.getChatPermissions();
     }
 
     @Override
