@@ -18,7 +18,7 @@ public interface IChannelPermission {
          * @return The IChannelPermission-Object
          */
         public static IChannelPermission getChatPermissions(){
-            return new WhiteList(new String[]{"gainerbot", "ni\uD83C\uDD71\uD83C\uDD71a"}, new String[]{"chat"});
+            return new WhiteList(new String[]{"ni\uD83C\uDD71\uD83C\uDD71a"}, new String[]{"chat", "bot"});
         }
 
         /**Elevated Permissions are listening on every Channel, except public and a few exceptions.

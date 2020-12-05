@@ -26,6 +26,7 @@ public class GainerBotCommands {
         commands.add(new Watch2Gether());
         commands.add(new Nibba());
         commands.add(new Fuck());
+        commands.add(new Pasta());
         commands.add(new OWOifier());
 
         //Extract all the commandNames.
@@ -40,9 +41,6 @@ public class GainerBotCommands {
         MessageChannel channel = event.getChannel();
 
         if(!msg.startsWith(prefix)) return false;
-
-        //Channel restriction. Remove if not needed.
-        if(!event.getChannel().getName().contains("bot")) return false;
 
         String[] tokens = commandToTokens(msg);
         if(tokens.length == 0) return false;
