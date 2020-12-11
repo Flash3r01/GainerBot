@@ -23,6 +23,8 @@ public class GainerBot extends ListenerAdapter {
     public static JDA jdaInstance;
 
     public static final GainerBotCommands commandManager = new GainerBotCommands();
+    public static final GainerBotPatterns patternManager = new GainerBotPatterns();
+
     public static final HttpService httpService = new HttpService();
 
     public static void startGainerBot(){
@@ -78,5 +80,6 @@ public class GainerBot extends ListenerAdapter {
     @Override
     public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
         commandManager.processCommandMessage(event);
+        patternManager.applyPatterns(event);
     }
 }
