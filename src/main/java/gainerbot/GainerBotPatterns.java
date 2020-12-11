@@ -24,4 +24,8 @@ public class GainerBotPatterns {
             }
         }
     }
+
+    public ArrayList<BasePattern> getPatterns() {
+        return patterns;
+    }
 }
