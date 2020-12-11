@@ -2,6 +2,7 @@ package gainerbot;
 
 import gainerbot.patterns.BasePattern;
 import gainerbot.patterns.Game;
+import gainerbot.patterns.Loiny;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import javax.annotation.Nonnull;
@@ -13,6 +14,7 @@ public class GainerBotPatterns {
     public GainerBotPatterns(){
         //Add all the Patterns the Bot should know.
         patterns.add(new Game());
+        patterns.add(new Loiny());
     }
 
     public void applyPatterns(@Nonnull MessageReceivedEvent event){
