@@ -18,6 +18,8 @@ public class GainerBotPatterns {
     }
 
     public void applyPatterns(@Nonnull MessageReceivedEvent event){
+        if(event.getAuthor().isBot()) return;
+
         for(BasePattern pattern : patterns){
             if(pattern.isActive() && pattern.listensOnChannel(event.getChannel())){
                 pattern.run(event);
