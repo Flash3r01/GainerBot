@@ -14,7 +14,7 @@ public class Loiny extends BasePattern{
     public void run(@Nonnull MessageReceivedEvent event) {
         if(event.getAuthor().getId().equals("271344495885418497")){
             String msg = event.getAuthor().getAsMention() +
-                    "\n🤣🤣Oh mi **Goooosh**!🤩 Look at yor naim!😏😏 It remembered me of dis here‼‼‼ Luuk at it xD 🙃" +
+                    "\n:rofl::rofl:Oh mi **Goooosh**!:heart_eyes: Look at yor naim!:exploding_head: It remembered me of dis here:exclamation::exclamation::smirk: Luuk at it xD :upside_down:" +
                     "\nhttps://youtu.be/YPB-hpNgQNI?t=49";
             event.getMessage().reply(msg).queue();
         }
