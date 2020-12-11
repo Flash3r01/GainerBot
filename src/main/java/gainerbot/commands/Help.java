@@ -23,13 +23,19 @@ public class Help extends BaseCommand{
             List<BaseCommand> commands = GainerBot.commandManager.getCommands();
             StringBuilder stringBuilder = new StringBuilder();
 
+            stringBuilder.append("```\n");
+
             for (BaseCommand command : commands) {
                 String commandString = GainerBot.commandManager.getPrefix() + command.names[0];
-                commandString += "\t\t-\t";
+                commandString += " ".repeat(15-commandString.length());
+                commandString += "-\t";
                 commandString += command.description + "\n";
 
                 stringBuilder.append(commandString);
             }
+
+            stringBuilder.append("```");
+
             helpString = stringBuilder.toString();
         }
 
