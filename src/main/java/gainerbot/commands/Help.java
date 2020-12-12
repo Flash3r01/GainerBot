@@ -1,6 +1,7 @@
 package gainerbot.commands;
 
 import gainerbot.GainerBot;
+import gainerbot.permissions.IChannelPermission;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import javax.annotation.Nonnull;
@@ -11,6 +12,7 @@ public class Help extends BaseCommand{
 
     public Help() {
         super(new String[]{"help", "?"}, "Lists all commands and a short description of them");
+        this.listeningChannels = IChannelPermission.Presets.getElevatedPermissions();
     }
 
     @Override
