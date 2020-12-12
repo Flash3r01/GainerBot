@@ -7,7 +7,7 @@ import javax.annotation.Nonnull;
 
 public class Game extends BasePattern {
     public Game() {
-        super("game", "Censors the rudest word in the world.");
+        super("Game", "Censors the rudest word in the world.");
         this.listeningChannels = IChannelPermission.Presets.getElevatedPermissions();
     }
 
