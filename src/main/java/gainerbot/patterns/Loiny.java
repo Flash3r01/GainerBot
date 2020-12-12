@@ -1,5 +1,6 @@
 package gainerbot.patterns;
 
+import gainerbot.permissions.IChannelPermission;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import javax.annotation.Nonnull;
@@ -8,6 +9,7 @@ public class Loiny extends BasePattern{
 
     public Loiny() {
         super("Loiny", "Gives Lenny the attention he deserves.");
+        this.listeningChannels = IChannelPermission.Presets.getChatPermissions();
     }
 
     @Override

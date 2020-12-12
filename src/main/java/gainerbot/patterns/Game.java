@@ -1,5 +1,6 @@
 package gainerbot.patterns;
 
+import gainerbot.permissions.IChannelPermission;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import javax.annotation.Nonnull;
@@ -7,6 +8,7 @@ import javax.annotation.Nonnull;
 public class Game extends BasePattern {
     public Game() {
         super("game", "Censors the rudest word in the world.");
+        this.listeningChannels = IChannelPermission.Presets.getElevatedPermissions();
     }
 
     @Override
