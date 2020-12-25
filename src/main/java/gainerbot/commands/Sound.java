@@ -4,6 +4,7 @@ import gainerbot.GainerBotConfiguration;
 import gainerbot.audio.AudioPlayerSendHandler;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
@@ -32,11 +33,17 @@ public class Sound extends BaseCommand {
             GuildVoiceState voiceState = member.getVoiceState();
 
             if(voiceState != null && voiceState.inVoiceChannel()){
+                if(options.length < 1){
+                    showAvailableSounds(event.getChannel());
+                    event.getMessage().delete().queue();
+                    return;
+                }
                 String soundPath = optionsToSoundPath(options);
                 if(soundPath == null){
                     event.getChannel().sendMessage("Sound \""+options[0]+"\" has not been found.").queue();
                     return;
                 }
+                event.getMessage().delete().queue();
                 gainerbot.audio.AudioManager.getAudioManager().loadAudio(soundPath);
                 connectToChannel(voiceState.getChannel());
             }else{
@@ -45,6 +52,17 @@ public class Sound extends BaseCommand {
         }else{
             event.getChannel().sendMessage("You have to use this command in a Server.").queue();
         }
+    }
+
+    private void showAvailableSounds(MessageChannel channel){
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("__Following sounds :loud_sound: are currently available:__\n");
+        for(String name : soundNames){
+            builder.append(name, 0, name.lastIndexOf('.'));
+            builder.append("\n");
+        }
+        channel.sendMessage(builder.toString()).queue();
     }
 
     private void connectToChannel(VoiceChannel channel){
@@ -59,7 +77,7 @@ public class Sound extends BaseCommand {
 
     private String optionsToSoundPath(String[] options){
         String ret = null;
-        if(options.length == 1){
+        if(options.length >= 1){
             for(String name : soundNames){
                 if(name.toLowerCase().startsWith(options[0].toLowerCase())){
                     ret = soundBase.resolve(name).toString();
