@@ -29,6 +29,7 @@ public class GainerBotCommands {
         commands.add(new Pasta());
         commands.add(new OWOifier());
         commands.add(new Pattern());
+        commands.add(new Sound());
 
         //Extract all the commandNames.
         for(BaseCommand command : commands){

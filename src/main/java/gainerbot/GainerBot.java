@@ -4,6 +4,9 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -18,6 +21,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 public class GainerBot extends ListenerAdapter {
     public static JDA jdaInstance;
@@ -81,5 +85,25 @@ public class GainerBot extends ListenerAdapter {
     public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
         commandManager.processCommandMessage(event);
         patternManager.applyPatterns(event);
+    }
+
+    @Override
+    public void onGuildVoiceUpdate(@Nonnull GuildVoiceUpdateEvent event) {
+        //Is this necessary?
+        super.onGuildVoiceUpdate(event);
+
+        VoiceChannel channel = event.getChannelLeft();
+        if(channel == null) return;
+        List<Member> membersInChannel = channel.getMembers();
+        boolean foundSelf = false;
+        for(Member member : membersInChannel){
+            if(!member.getUser().isBot()){
+                return;
+            }else if(member.getUser().getId().equals(jdaInstance.getSelfUser().getId())){
+                foundSelf = true;
+            }
+        }
+
+        if(foundSelf) channel.getGuild().getAudioManager().closeAudioConnection();
     }
 }
