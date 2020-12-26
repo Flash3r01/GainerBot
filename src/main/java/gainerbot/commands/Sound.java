@@ -57,7 +57,7 @@ public class Sound extends BaseCommand {
     private void showAvailableSounds(MessageChannel channel){
         StringBuilder builder = new StringBuilder();
 
-        builder.append("__Following sounds :loud_sound: are currently available:__\n");
+        builder.append("__Following sounds are currently available:__ :loud_sound:\n");
         for(String name : soundNames){
             builder.append(name, 0, name.lastIndexOf('.'));
             builder.append("\n");
