@@ -15,14 +15,13 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class Sound extends BaseCommand {
-    private final String soundDirectory = "sound\\";
     private final Path soundBase;
 
     private String[] soundNames;
 
     public Sound() {
         super(new String[] {"sound"}, "Plays a sound in your current voice channel.");
-        soundBase = GainerBotConfiguration.basePath.resolve(soundDirectory);
+        soundBase = GainerBotConfiguration.basePath.resolve("sound");
         initSound();
     }
 
