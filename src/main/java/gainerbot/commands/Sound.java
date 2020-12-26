@@ -89,8 +89,14 @@ public class Sound extends BaseCommand {
 
     private void initSound(){
         ArrayList<String> names = new ArrayList<>();
-        for(File file : soundBase.toFile().listFiles()){
+        File[] files = soundBase.toFile().listFiles();
+        if(files == null){
+            soundNames = new String[0];
+            return;
+        }
+        for(File file : files){
             String name = file.toPath().getFileName().toString();
+            if(name.endsWith(".md")) continue;
             //name = name.substring(0, name.lastIndexOf('.'));
             names.add(name);
         }
