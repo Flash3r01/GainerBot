@@ -53,7 +53,7 @@ public class AudioManager {
 
             @Override
             public void loadFailed(FriendlyException exception) {
-                logChannel.sendMessage("Encountered an error while loading your sound: " + exception.getMessage() + "\nAs String:: \n" + exception.toString()).queue();
+                logChannel.sendMessage("Encountered an error while loading your sound: " + exception.toString() + "\nIdentifier: " + path).queue();
             }
         });
     }
