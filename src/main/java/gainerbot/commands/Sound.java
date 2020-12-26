@@ -43,7 +43,7 @@ public class Sound extends BaseCommand {
                     return;
                 }
                 event.getMessage().delete().queue();
-                gainerbot.audio.AudioManager.getAudioManager().loadAudio(soundPath);
+                gainerbot.audio.AudioManager.getAudioManager().loadAudio(soundPath, event.getChannel());
                 connectToChannel(voiceState.getChannel());
             }else{
                 event.getChannel().sendMessage("You have to be in a Voice Channel to use this command.").queue();
