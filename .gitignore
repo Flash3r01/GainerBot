@@ -2,3 +2,9 @@
 /.gradle/
 /build/
 /build/classes/java/main/
+
+# Specific files
+/data/token.txt
+
+# Data folders
+/data/sound/
