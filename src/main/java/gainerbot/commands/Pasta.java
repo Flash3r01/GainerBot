@@ -5,7 +5,9 @@ import gainerbot.permissions.IChannelPermission;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import javax.annotation.Nonnull;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -42,7 +44,7 @@ public class Pasta extends BaseCommand {
                             BufferedReader reader = new BufferedReader(new FileReader(pastaFile, StandardCharsets.UTF_8));
                             StringBuilder msgBuilder = new StringBuilder();
 
-                            String line = null;
+                            String line;
                             while((line = reader.readLine()) != null){
                                 msgBuilder.append(line).append("\n");
                             }
@@ -63,8 +65,15 @@ public class Pasta extends BaseCommand {
     private void initPasta(){
         pastaBase = Paths.get(GainerBotConfiguration.basePath.toString(), "pasta").toFile();
         ArrayList<String> names = new ArrayList<>();
-        for(File file : pastaBase.listFiles()){
-            String name = file.toPath().getFileName().toString().replace(".txt", "");
+        File[] files = pastaBase.listFiles();
+        if(files == null){
+            pastaNames = new String[0];
+            return;
+        }
+        for(File file : files){
+            String name = file.toPath().getFileName().toString();
+            if(name.endsWith(".md")) continue;
+            name = name.replace(".txt", "");
             names.add(name);
         }
         pastaNames = names.toArray(new String[0]);
