@@ -11,7 +11,7 @@ public abstract class BasePattern {
     protected final String description;
 
     protected boolean isActive = true;
-    protected IChannelPermission listeningChannels = IChannelPermission.Presets.getStandardPermissions();
+    protected IChannelPermission listeningChannels = IChannelPermission.Presets.getBotPermissions();
 
     protected BasePattern(String name, String description){
         this.name = name;

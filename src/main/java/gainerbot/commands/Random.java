@@ -1,6 +1,7 @@
 package gainerbot.commands;
 
 import gainerbot.GainerBotConfiguration;
+import gainerbot.permissions.IChannelPermission;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.IMentionable;
 import net.dv8tion.jda.api.entities.Member;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 public class Random extends BaseCommand {
     public Random() {
         super(new String[]{"random", "rnd"}, "Generates a random number between 0(inclusive) and 1(exclusive)");
+        this.listeningChannels = IChannelPermission.Presets.getChatPermissions();
     }
 
     //TODO Rework all of this...

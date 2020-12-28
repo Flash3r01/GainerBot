@@ -4,7 +4,7 @@ public class BlackList implements IChannelPermission {
     private final String[] blackList;
     private final String[] tagBlackList;
 
-    BlackList(String[] blackList, String[] tagBlackList){
+    public BlackList(String[] blackList, String[] tagBlackList){
         this.blackList = blackList;
         this.tagBlackList = tagBlackList;
     }

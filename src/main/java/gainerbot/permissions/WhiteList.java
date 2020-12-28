@@ -4,7 +4,7 @@ public class WhiteList implements IChannelPermission {
     private final String[] whiteList;
     private final String[] tagWhiteList;
 
-    WhiteList(String[] whiteList, String[] tagWhiteList){
+    public WhiteList(String[] whiteList, String[] tagWhiteList){
         this.whiteList = whiteList;
         this.tagWhiteList = tagWhiteList;
     }

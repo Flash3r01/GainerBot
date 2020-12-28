@@ -9,7 +9,7 @@ public abstract class BaseCommand {
     public final String[] names;
     public final String description;
 
-    protected IChannelPermission listeningChannels = IChannelPermission.Presets.getStandardPermissions();
+    protected IChannelPermission listeningChannels = IChannelPermission.Presets.getBotPermissions();
 
     protected BaseCommand(String[] names, String description) {
         this.names = names;

@@ -1,5 +1,6 @@
 package gainerbot.commands;
 
+import gainerbot.permissions.IChannelPermission;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import javax.annotation.Nonnull;
@@ -7,6 +8,7 @@ import javax.annotation.Nonnull;
 public class Google extends BaseCommand {
     public Google() {
         super(new String[]{"google"}, "Creates a lmgtfy-Link with the specified input.");
+        this.listeningChannels = IChannelPermission.Presets.getChatPermissions();
     }
 
     @Override

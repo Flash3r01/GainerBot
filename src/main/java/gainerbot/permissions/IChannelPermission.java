@@ -9,7 +9,7 @@ public interface IChannelPermission {
          *
          * @return The IChannelPermission-Object
          */
-        public static IChannelPermission getStandardPermissions(){
+        public static IChannelPermission getBotPermissions(){
             return new WhiteList(new String[]{}, new String[]{"bot"});
         }
 
@@ -18,7 +18,7 @@ public interface IChannelPermission {
          * @return The IChannelPermission-Object
          */
         public static IChannelPermission getChatPermissions(){
-            return new WhiteList(new String[]{"ni\uD83C\uDD71\uD83C\uDD71a"}, new String[]{"chat", "bot"});
+            return new WhiteList(new String[]{"ni\uD83C\uDD71\uD83C\uDD71a", "rezeption"}, new String[]{"chat", "bot"});
         }
 
         /**Elevated Permissions are listening on every Channel, except public and a few exceptions.
@@ -26,7 +26,7 @@ public interface IChannelPermission {
          * @return The IChannelPermission-Object
          */
         public static IChannelPermission getElevatedPermissions(){
-            return new BlackList(new String[]{"foyer", "rezeption", "klassiker", "zitate"}, new String[]{});
+            return new BlackList(new String[]{"foyer", "klassiker", "zitate"}, new String[]{});
         }
     }
 }
