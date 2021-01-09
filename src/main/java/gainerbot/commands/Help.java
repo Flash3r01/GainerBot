@@ -5,6 +5,7 @@ import gainerbot.permissions.IChannelPermission;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import javax.annotation.Nonnull;
+import java.util.HashMap;
 import java.util.List;
 
 public class Help extends BaseCommand{
@@ -16,7 +17,7 @@ public class Help extends BaseCommand{
     }
 
     @Override
-    public void execute(@Nonnull MessageReceivedEvent event, String[] options) {
+    public void execute(@Nonnull MessageReceivedEvent event, HashMap<String, String> options, String[] arguments) {
         event.getChannel().sendMessage(getHelpString()).queue();
     }
 

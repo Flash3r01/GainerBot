@@ -4,6 +4,7 @@ import gainerbot.permissions.WhiteList;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import javax.annotation.Nonnull;
+import java.util.HashMap;
 
 public class Nibba extends BaseCommand{
     public Nibba() {
@@ -12,9 +13,9 @@ public class Nibba extends BaseCommand{
     }
 
     @Override
-    public void execute(@Nonnull MessageReceivedEvent event, String[] options) {
-        if(options.length > 0){
-            String s = options[0].replace("b", ":b:").replace("B",":b:");
+    public void execute(@Nonnull MessageReceivedEvent event, HashMap<String, String> options, String[] arguments) {
+        if(arguments.length > 0){
+            String s = arguments[0].replace("b", ":b:").replace("B",":b:");
             event.getChannel().sendMessage(s).queue();
         }else {
             event.getChannel().sendMessage("Ni:b::b:a").queue();

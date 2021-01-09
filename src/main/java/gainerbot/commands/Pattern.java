@@ -5,6 +5,7 @@ import gainerbot.patterns.BasePattern;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import javax.annotation.Nonnull;
+import java.util.HashMap;
 
 public class Pattern extends BaseCommand {
     public Pattern() {
@@ -12,13 +13,13 @@ public class Pattern extends BaseCommand {
     }
 
     @Override
-    public void execute(@Nonnull MessageReceivedEvent event, String[] options) {
-        switch(options.length){
+    public void execute(@Nonnull MessageReceivedEvent event, HashMap<String, String> options, String[] arguments) {
+        switch(arguments.length){
             case 1:
-                togglePattern(event, options[0]);
+                togglePattern(event, arguments[0]);
                 break;
             case 2:
-                setPattern(event, options[0], options[1]);
+                setPattern(event, arguments[0], arguments[1]);
                 break;
             case 0:
             default:

@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import javax.annotation.Nonnull;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,24 +23,24 @@ public class Random extends BaseCommand {
 
     //TODO Rework all of this...
     @Override
-    public void execute(@Nonnull MessageReceivedEvent event, String[] options) {
+    public void execute(@Nonnull MessageReceivedEvent event, HashMap<String, String> options, String[] arguments) {
         java.util.Random r = GainerBotConfiguration.random;
-        if(options.length == 0){
+        if(arguments.length == 0){
             event.getChannel().sendMessage("Your random Number is: " + r.nextFloat()).queue();
         }
-        else if(options.length == 1){
+        else if(arguments.length == 1){
             try {
-                int randomInt = r.nextInt(Integer.parseInt(options[0]));
+                int randomInt = r.nextInt(Integer.parseInt(arguments[0]));
                 event.getChannel().sendMessage("Your random number is: " + randomInt).queue();
             } catch (NumberFormatException e) {
 
-                if(options[0].equalsIgnoreCase("online")){
+                if(arguments[0].equalsIgnoreCase("online")){
                     //TODO Test if this works - online should not work :/
                     List<Member> onlineMembers = event.getGuild().getMembers().stream().filter(member -> member.getOnlineStatus() != OnlineStatus.OFFLINE).collect(Collectors.toList());
                     int randomMemberIndex = r.nextInt(onlineMembers.size());
                     event.getChannel().sendMessage("Congratz! " + onlineMembers.get(randomMemberIndex).getAsMention() + " was chosen randomly.").queue();
                 }
-                else if(options[0].equalsIgnoreCase("voice")){
+                else if(arguments[0].equalsIgnoreCase("voice")){
                     Member member = event.getMember();
                     if(member != null){
                         //TODO Test if uncached members are also included.
@@ -52,7 +53,7 @@ public class Random extends BaseCommand {
                         }
                     }
                 }else {
-                    randomFromSet(event, options);
+                    randomFromSet(event, arguments);
                     /*
                     int charIndex = r.nextInt(options[0].length());
                     event.getChannel().sendMessage("Your random char from the string is: " + options[0].charAt(charIndex)).queue();
@@ -61,12 +62,12 @@ public class Random extends BaseCommand {
             }
         }
         else{
-            if(options[0].equalsIgnoreCase("oneof")){
-                int randomIndex = r.nextInt(options.length-1)+1;
-                event.getChannel().sendMessage("The chosen option is: " + options[randomIndex]).queue();
+            if(arguments[0].equalsIgnoreCase("oneof")){
+                int randomIndex = r.nextInt(arguments.length-1)+1;
+                event.getChannel().sendMessage("The chosen option is: " + arguments[randomIndex]).queue();
             }
             else{
-                randomFromSet(event, options);
+                randomFromSet(event, arguments);
             }
         }
     }

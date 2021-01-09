@@ -4,6 +4,7 @@ import gainerbot.permissions.IChannelPermission;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import javax.annotation.Nonnull;
+import java.util.HashMap;
 
 public abstract class BaseCommand {
     public final String[] names;
@@ -20,5 +21,5 @@ public abstract class BaseCommand {
         return listeningChannels.isAllowed(channelName);
     }
 
-    public abstract void execute(@Nonnull MessageReceivedEvent event, String[] options);
+    public abstract void execute(@Nonnull MessageReceivedEvent event, HashMap<String, String> options, String[] arguments);
 }

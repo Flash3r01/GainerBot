@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Pasta extends BaseCommand {
     private String[] pastaNames;
@@ -23,9 +24,9 @@ public class Pasta extends BaseCommand {
     }
 
     @Override
-    public void execute(@Nonnull MessageReceivedEvent event, String[] options) {
+    public void execute(@Nonnull MessageReceivedEvent event, HashMap<String, String> options, String[] arguments) {
         //Handle command without options
-        if(options.length <= 0){
+        if(arguments.length <= 0){
             StringBuilder strBuilder = new StringBuilder();
             strBuilder.append("Following copypastas are available:").append("\n");
             for(String name : pastaNames){
@@ -35,9 +36,9 @@ public class Pasta extends BaseCommand {
             event.getMessage().delete().queue();
         }
         //Handle command with 1 option
-        else if(options.length == 1){
+        else if(arguments.length == 1){
             for(String available : pastaNames){
-                if(options[0].equalsIgnoreCase(available)){
+                if(arguments[0].equalsIgnoreCase(available)){
                     File pastaFile = new File(Paths.get(pastaBase.toString(), available + ".txt").toString());
                     if(pastaFile.exists()){
                         try {

@@ -12,6 +12,7 @@ import javax.annotation.Nonnull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Fuck extends BaseCommand {
     private static final String operationsURL = "http://foaas.com/operations";
@@ -23,8 +24,8 @@ public class Fuck extends BaseCommand {
     }
 
     @Override
-    public void execute(@Nonnull MessageReceivedEvent event, String[] options) {
-        if(options.length > 1) return;
+    public void execute(@Nonnull MessageReceivedEvent event, HashMap<String, String> options, String[] arguments) {
+        if(arguments.length > 1) return;
 
         String message = null;
         try {
@@ -33,7 +34,7 @@ public class Fuck extends BaseCommand {
 
             //Fill a list with the fitting urls.
             ArrayList<String> urls = new ArrayList<>();
-            if(options.length == 0) {
+            if(arguments.length == 0) {
                 for (int i = 0; i < root.length(); i++) {
                     JSONObject obj = root.getJSONObject(i);
                     JSONArray fields = obj.getJSONArray("fields");
@@ -59,8 +60,8 @@ public class Fuck extends BaseCommand {
             int randomIndex = GainerBotConfiguration.random.nextInt(urls.size());
             String url = urls.get(randomIndex);
             url = url.replace(":from", "ppllaacceehhoollddeerr");
-            if(options.length == 1){
-                url = url.replace(":name", options[0]);
+            if(arguments.length == 1){
+                url = url.replace(":name", arguments[0]);
             }
 
             JSONObject jsonResponse = new JSONObject(service.requestJsonString(new URI(baseUrl + url)));

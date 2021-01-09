@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import javax.annotation.Nonnull;
+import java.util.HashMap;
 import java.util.List;
 
 public class Watch2Gether extends BaseCommand {
@@ -14,8 +15,9 @@ public class Watch2Gether extends BaseCommand {
         super(new String[]{"w2g", "watch2gether"}, "Sends the Link to our Watch2Gether-Room");
     }
 
+    //TODO Add an option to create a new Room?
     @Override
-    public void execute(@Nonnull MessageReceivedEvent event, String[] options) {
+    public void execute(@Nonnull MessageReceivedEvent event, HashMap<String, String> options, String[] arguments) {
         getW2GChannel(event).sendMessage("Klick mich an: " + w2gUrl).queue();
     }
 

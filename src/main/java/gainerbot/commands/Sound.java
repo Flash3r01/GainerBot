@@ -13,6 +13,7 @@ import javax.annotation.Nonnull;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Sound extends BaseCommand {
     private final Path soundBase;
@@ -26,20 +27,20 @@ public class Sound extends BaseCommand {
     }
 
     @Override
-    public void execute(@Nonnull MessageReceivedEvent event, String[] options) {
+    public void execute(@Nonnull MessageReceivedEvent event, HashMap<String, String> options, String[] arguments) {
         Member member = event.getMember();
         if(member != null){
             GuildVoiceState voiceState = member.getVoiceState();
 
             if(voiceState != null && voiceState.inVoiceChannel()){
-                if(options.length < 1){
+                if(arguments.length < 1){
                     showAvailableSounds(event.getChannel());
                     event.getMessage().delete().queue();
                     return;
                 }
-                String soundPath = optionsToSoundPath(options);
+                String soundPath = optionsToSoundPath(arguments);
                 if(soundPath == null){
-                    event.getChannel().sendMessage("Sound \""+options[0]+"\" has not been found.").queue();
+                    event.getChannel().sendMessage("Sound \""+arguments[0]+"\" has not been found.").queue();
                     return;
                 }
                 event.getMessage().delete().queue();
