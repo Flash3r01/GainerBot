@@ -30,4 +30,13 @@ public class GainerBotPatterns {
     public ArrayList<BasePattern> getPatterns() {
         return patterns;
     }
+
+    public BasePattern getPatternByName(String name){
+        for(BasePattern currentPattern : patterns){
+            if(name.equalsIgnoreCase(currentPattern.getClass().getSimpleName())){
+                return currentPattern;
+            }
+        }
+        return null;
+    }
 }

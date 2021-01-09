@@ -1,5 +1,6 @@
 package gainerbot;
 
+import gainerbot.patterns.Loiny;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -8,6 +9,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
@@ -89,7 +91,7 @@ public class GainerBot extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceUpdate(@Nonnull GuildVoiceUpdateEvent event) {
-        //Is this necessary?
+        //TODO Is this necessary?
         super.onGuildVoiceUpdate(event);
 
         VoiceChannel channel = event.getChannelLeft();
@@ -105,5 +107,20 @@ public class GainerBot extends ListenerAdapter {
         }
 
         if(foundSelf) channel.getGuild().getAudioManager().closeAudioConnection();
+    }
+
+    @Override
+    public void onMessageReactionAdd(@Nonnull MessageReactionAddEvent event) {
+        //TODO Is this necessary?
+        super.onMessageReactionAdd(event);
+
+        //If X on Loiny disable Loiny
+        Loiny myLoiny = ((Loiny) patternManager.getPatternByName("Loiny"));
+        if(myLoiny.isActive()
+                && event.getReactionEmote().isEmoji()
+                && event.getReactionEmote().getEmoji().equals(myLoiny.disableEmoji)
+                && event.getMessageId().equals(myLoiny.lastMessageID)){
+            myLoiny.setActive(false);
+        }
     }
 }

@@ -253,5 +253,16 @@ public class GainerBotCommands {
     public List<String[]> getCommandNames() {
         return commandNames;
     }
+
+    public BaseCommand getCommandByName(String name){
+        for(int i = 0; i < commandNames.size(); i++){
+            for(int j = 0; j< commandNames.get(i).length; j++){
+                if(name.equalsIgnoreCase(commandNames.get(i)[j])){
+                    return commands.get(i);
+                }
+            }
+        }
+        return null;
+    }
     //endregion
 }
