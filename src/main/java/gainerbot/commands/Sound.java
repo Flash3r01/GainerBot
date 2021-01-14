@@ -79,6 +79,7 @@ public class Sound extends BaseCommand {
         String ret = null;
         if(options.length >= 1){
             for(String name : soundNames){
+                //TODO Fix the startsWith comparison.
                 if(name.toLowerCase().startsWith(options[0].toLowerCase())){
                     ret = soundBase.resolve(name).toString();
                 }
