@@ -29,7 +29,7 @@ public class GainerBotCommands {
         commands.add(new Pasta());
         commands.add(new OWOifier());
         commands.add(new Pattern());
-        //commands.add(new Sound());    //TODO fix the Sound on aarch64-processors
+        commands.add(new Sound());    //TODO fix the Sound on aarch64-processors
 
         //Extract all the commandNames.
         for(BaseCommand command : commands){

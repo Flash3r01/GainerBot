@@ -3,6 +3,8 @@
 /build/
 /build/classes/java/main/
 
+/.idea/
+
 # Specific files
 /data/token.txt
 
