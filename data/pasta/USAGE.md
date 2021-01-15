@@ -1,7 +1,7 @@
-#Pasta
+# Pasta
 
-####What command uses this data?
+#### What command uses this data?
 + pasta
 
-####What filetypes are supported?
+#### What filetypes are supported?
 + *.txt
