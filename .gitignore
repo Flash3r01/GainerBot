@@ -6,7 +6,10 @@
 /.idea/
 
 # Specific files
-/data/token.txt
+data/token.txt
 
-# Data folders
-/data/sound/
+# Data
+data/sound/*
+!data/sound/USAGE.md
+
+data/surprise/surprise.txt
