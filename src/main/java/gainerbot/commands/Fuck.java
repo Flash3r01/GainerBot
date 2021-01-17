@@ -2,8 +2,8 @@ package gainerbot.commands;
 
 import gainerbot.GainerBot;
 import gainerbot.GainerBotConfiguration;
-import gainerbot.HttpService;
 import gainerbot.permissions.IChannelPermission;
+import gainerbot.services.HttpService;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.json.JSONArray;
 import org.json.JSONObject;

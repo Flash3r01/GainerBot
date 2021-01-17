@@ -1,8 +1,8 @@
 package gainerbot.commands;
 
 import gainerbot.GainerBot;
-import gainerbot.HttpService;
 import gainerbot.permissions.IChannelPermission;
+import gainerbot.services.HttpService;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
