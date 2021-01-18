@@ -32,6 +32,7 @@ public class GainerBotCommands {
         //commands.add(new Sound());    //TODO fix the Sound on aarch64-processors
         commands.add(new Surprise());
         commands.add(new Pog());
+        commands.add(new Status());
 
         //Extract all the commandNames.
         for(BaseCommand command : commands){
