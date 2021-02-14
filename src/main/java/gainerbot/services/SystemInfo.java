@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 //TODO Has not been tested on anything else than a amd64 Windows machine.
+//TODO make this more performant. E.g. non-changing Values are queried multiple times.
 public class SystemInfo {
     private static final String osName;
     private static final String architecture;
@@ -54,10 +55,9 @@ public class SystemInfo {
             cpuLoad = getCpuLoad();
 
             InfoPosition startupPos = new InfoPosition("Systemstartzeit:\\s+(\\d{2}\\.\\d{2}\\.\\d{4}, \\d{2}:\\d{2}:\\d{2})", 1);
-            InfoPosition freeRamPos = new InfoPosition("Verfügbarer physischer Speicher:\\s+([\\d\\.]+) MB", 1);
+            InfoPosition freeRamPos = new InfoPosition("gbarer physischer Speicher:\\s+([\\d\\.]+) MB", 1);
             InfoPosition ramMaxPos = new InfoPosition("Gesamter physischer Speicher:\\s+([\\d\\.]+) MB", 1);
-            //TODO the systeminfo-call does not return the information.
-            String[] systeminfos = extractFromExec("systeminfo", startupPos, ramMaxPos, freeRamPos);
+            String[] systeminfos = extractFromSysteminfo(startupPos, ramMaxPos, freeRamPos);
 
             if(systeminfos == null){
                 startupTime = infoNotAvailable;
@@ -78,8 +78,8 @@ public class SystemInfo {
                     systemRamUsed = infoNotAvailable;
                     systemRamMax = systeminfos[2].replaceAll("\\.", "") + " MB";
                 }else{
-                    long freeRam = Long.parseLong(systeminfos[1].replaceAll("\\.", ""));
-                    long maxRam = Long.parseLong(systeminfos[2].replaceAll("\\.", ""));
+                    long freeRam = Long.parseLong(systeminfos[2].replaceAll("\\.", ""));
+                    long maxRam = Long.parseLong(systeminfos[1].replaceAll("\\.", ""));
                     if(maxRam - freeRam < 0){
                         systemRamUsed = infoNotAvailable;
                     }else{
@@ -116,6 +116,47 @@ public class SystemInfo {
         }
 
         return new SystemInfo(localIP, startupTime, systemRamUsed, systemRamMax, javaRamUsed, javaRamMax, cpuLoad);
+    }
+
+    /**
+     * Extracts info specifically from the "SYSTEMINFO" command nuder windows.
+     * @param positions The InfoPositions to be extracted.
+     * @return An array of the found Info. Null if any Error occurred. Values are null if no match occurred.
+     */
+    private static String[] extractFromSysteminfo(InfoPosition... positions){
+        if(positions.length <= 0) return new String[0];
+        if(!isWindows()) throw new IllegalStateException("Tried to call \"Systeminfo\" command on a non Windows machine.");
+        String[] ret = new String[positions.length];
+
+        String reply = "";
+        try {
+            Process p = runtime.exec("SYSTEMINFO");
+            BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+            StringBuilder stringBuilder = new StringBuilder();
+            String line;
+            while((line=in.readLine()) != null){
+                stringBuilder.append(line);
+            }
+            reply = stringBuilder.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        //Match for the info
+        int counter = 0;
+        for(InfoPosition position : positions){
+            Matcher m = Pattern.compile(position.regex).matcher(reply);
+            if(m.find()){
+                ret[counter] = m.group(position.groupNum);
+            }else{
+                ret[counter] = null;
+            }
+            counter++;
+        }
+
+        return ret;
     }
 
     /**

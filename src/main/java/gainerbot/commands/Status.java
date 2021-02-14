@@ -17,10 +17,10 @@ public class Status extends BaseCommand{
     }
 
     private String systemInfoToString(SystemInfo info){
-        return "Gainerbot is running on a: " + SystemInfo.getArchitecture() + " " + SystemInfo.getOsName() + "\n\n" +
-                "CPU Load: " + info.getCachedCpuLoad() + "\n" +
-                "Memory: " + info.getCachedSystemRamUsed() + "(J:" + info.getCachedJavaRamUsed() + ") / " + info.getCachedSystemRamMax() + "(J:" + info.getCachedJavaRamMax() + ")\n" +
-                "Machine running since: " + info.getCachedStartupTime() + "\n" +
-                "Local IP: " + info.getCachedLocalIP();
+        return "**Gainerbot is running on a:** " + SystemInfo.getArchitecture() + " " + SystemInfo.getOsName() + "\n\n" +
+                "**CPU Load:** " + info.getCachedCpuLoad() + "\n" +
+                "**Memory:** " + info.getCachedSystemRamUsed() + "*(J:" + info.getCachedJavaRamUsed() + ")* / " + info.getCachedSystemRamMax() + "*(J:" + info.getCachedJavaRamMax() + ")*\n" +
+                "**Machine running since:** " + info.getCachedStartupTime() + "\n" +
+                "**Local IP:** " + info.getCachedLocalIP();
     }
 }
