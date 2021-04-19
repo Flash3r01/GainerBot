@@ -36,8 +36,9 @@ public class SchnitzelHuntInstance {
         this.schnitzels = new ArrayList<>();
         this.attemptCounter = 0;
 
-        loadSchnitzelsFromFile(schnitzelHuntUserBasePath.toPath().resolve(schnitzelsFileName).toFile());
-        welcomeUser();
+        File schnitzelsFile = schnitzelHuntUserBasePath.toPath().resolve(schnitzelsFileName).toFile();
+        if(schnitzelsFile.exists()) loadSchnitzelsFromFile(schnitzelsFile);
+        if(!schnitzels.isEmpty()) welcomeUser();
     }
 
     private void welcomeUser() {
