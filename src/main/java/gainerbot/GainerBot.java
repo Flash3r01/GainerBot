@@ -1,13 +1,11 @@
 package gainerbot;
 
 import gainerbot.patterns.Loiny;
+import gainerbot.schnitzel.SchnitzelHuntManager;
 import gainerbot.services.HttpService;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
@@ -29,8 +27,9 @@ import java.util.List;
 public class GainerBot extends ListenerAdapter {
     public static JDA jdaInstance;
 
-    public static final GainerBotCommands commandManager = new GainerBotCommands();
-    public static final GainerBotPatterns patternManager = new GainerBotPatterns();
+    public static GainerBotCommands commandManager;
+    public static GainerBotPatterns patternManager;
+    public static SchnitzelHuntManager schnitzelHuntManager;
 
     public static final HttpService httpService = new HttpService();
 
@@ -78,6 +77,11 @@ public class GainerBot extends ListenerAdapter {
             e.printStackTrace();
             System.out.println("A needed Thread was interrupted.");
         }
+
+        commandManager = new GainerBotCommands();
+        patternManager = new GainerBotPatterns();
+        schnitzelHuntManager = SchnitzelHuntManager.getSchnitzelManager();
+
         for(Guild guild : jdaInstance.getGuilds()){
             guild.loadMembers().onSuccess(list -> System.out.println("Members loaded"));
         }
@@ -86,8 +90,12 @@ public class GainerBot extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
-        commandManager.processCommandMessage(event);
-        patternManager.applyPatterns(event);
+        if(!event.getMessage().isFromType(ChannelType.PRIVATE)) {
+            commandManager.processCommandMessage(event);
+            patternManager.applyPatterns(event);
+        }else{
+            schnitzelHuntManager.handlePrivateMessage(event);
+        }
     }
 
     @Override

@@ -21,3 +21,7 @@ dependencies {
     //This library does not fix the lavaplayer natives
     //implementation 'com.github.natanbc:lp-cross:0.1.1'
 }
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
