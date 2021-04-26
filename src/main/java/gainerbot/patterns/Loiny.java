@@ -14,6 +14,7 @@ public class Loiny extends BasePattern{
     public Loiny() {
         super("Loiny", "Gives Lenny the attention he deserves.");
         this.listeningChannels = IChannelPermission.Presets.getChatPermissions();
+        isActive = false;
     }
 
     @Override
