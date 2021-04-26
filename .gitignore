@@ -13,3 +13,6 @@ data/sound/*
 !data/sound/USAGE.md
 
 data/surprise/surprise.txt
+
+data/schnitzel/*
+!data/schnitzel/USAGE.md
