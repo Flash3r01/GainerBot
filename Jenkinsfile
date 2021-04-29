@@ -2,12 +2,6 @@
 pipeline {
     agent any
 
-    def remote = [:]
-    remote.name = "vServer"
-    remote.host = "144.91.86.28"
-    remote.knownHosts = "144.91.86.28 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBCin0HHDI6y+zpCujPp91LtiKB5JuZY3WxbATscfmZ3bnGv9E2IWQzo+p3uRUUq0GB/jL/B7G7JS3q8BXaXi6Os="
-
-
     //TODO Send mails on fail.
     stages {
         stage('Checkout') {
@@ -31,11 +25,15 @@ pipeline {
                 //TODO Failed on failure
             }
         }
-        withCredentials([sshUserPrivateKey(credentialsId: 'liveServer', keyFileVariable: 'keyFile', passphraseVariable: 'passPhrase', usernameVariable: 'userName')]) {
-            remote.user = userName
-            remote.passphrase = passPhrase
-            remote.identityFile = keyFile
-            stage('Deploy') {
+        stage('Deploy') {
+            withCredentials([sshUserPrivateKey(credentialsId: 'liveServer', keyFileVariable: 'keyFile', passphraseVariable: 'passPhrase', usernameVariable: 'userName')]) {
+                def remote = [:]
+                remote.name = "vServer"
+                remote.host = "144.91.86.28"
+                remote.knownHosts = "144.91.86.28 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBCin0HHDI6y+zpCujPp91LtiKB5JuZY3WxbATscfmZ3bnGv9E2IWQzo+p3uRUUq0GB/jL/B7G7JS3q8BXaXi6Os="
+                remote.user = userName
+                remote.passphrase = passPhrase
+                remote.identityFile = keyFile
                 steps {
                     echo 'Deploying...'
                     //TODO stop old service
