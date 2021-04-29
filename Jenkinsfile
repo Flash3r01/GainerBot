@@ -4,13 +4,14 @@ pipeline {
 
     //TODO Send mails on fail.
     stages {
+        /* Not needed. Code is already being cloned.
         stage('Checkout') {
             steps {
                 echo 'Checking out...'
                 checkout scm
                 //TODO Failed on failure
             }
-        }
+        }*/
         stage('Build') {
             steps {
                 echo 'Building...'
