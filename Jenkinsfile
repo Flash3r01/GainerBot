@@ -15,7 +15,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
-                sh chmod u+x gradlew
+                sh 'chmod u+x gradlew'
                 sh './gradlew shadowJar'
                 //TODO Failed on failure
             }
