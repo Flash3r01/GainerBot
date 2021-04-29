@@ -28,6 +28,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'liveServer', keyFileVariable: 'keyFile', passphraseVariable: 'passPhrase', usernameVariable: 'userName')]) {
+                    /*
                     def remote = [:]
                     remote.name = "vServer"
                     remote.host = "144.91.86.28"
@@ -42,6 +43,7 @@ pipeline {
                     sshPut remote: remote, from: 'build/libs/gainerbot-all.jar', into: '/home/deploy/gainerBot/'
                     sshScript remote: remote, script: '/home/deploy/gainerBot/start.sh'
                     //TODO Unstable on failure
+                     */
                 }
             }
         }
