@@ -1,17 +1,15 @@
 #!/usr/bin/env groovy
+
+def remote = [:]
+remote.name = "vServer"
+remote.host = "144.91.86.28"
+remote.knownHosts = "144.91.86.28 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBCin0HHDI6y+zpCujPp91LtiKB5JuZY3WxbATscfmZ3bnGv9E2IWQzo+p3uRUUq0GB/jL/B7G7JS3q8BXaXi6Os="
+
 pipeline {
     agent any
 
     //TODO Send mails on fail.
     stages {
-        /* Not needed. Code is already being cloned.
-        stage('Checkout') {
-            steps {
-                echo 'Checking out...'
-                checkout scm
-                //TODO Failed on failure
-            }
-        }*/
         stage('Build') {
             steps {
                 echo 'Building...'
@@ -30,20 +28,17 @@ pipeline {
         stage('Deploy') {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'liveServer', keyFileVariable: 'keyFile', passphraseVariable: 'passPhrase', usernameVariable: 'userName')]) {
-                    /*
-                    def remote = [:]
-                    remote.name = "vServer"
-                    remote.host = "144.91.86.28"
-                    remote.knownHosts = "144.91.86.28 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBCin0HHDI6y+zpCujPp91LtiKB5JuZY3WxbATscfmZ3bnGv9E2IWQzo+p3uRUUq0GB/jL/B7G7JS3q8BXaXi6Os="
                     remote.user = userName
                     remote.passphrase = passPhrase
                     remote.identityFile = keyFile
 
                     echo 'Deploying...'
-                    //TODO stop old service
-                    //TODO delete old jar
+                    sshCommand remote: remote, command: 'pwd'
+                    /*
+                    sshCommand remote: remote, command: 'sudo /bin/systemctl stop gainerbot'
+                    sshCommand remote: remote, command: 'rm /home/deploy/gainerBot/gainerbot-all.jar'
                     sshPut remote: remote, from: 'build/libs/gainerbot-all.jar', into: '/home/deploy/gainerBot/'
-                    sshScript remote: remote, script: '/home/deploy/gainerBot/start.sh'
+                    sshCommand remote: remote, command: 'sudo /bin/systemctl start gainerbot'
                     //TODO Unstable on failure
                      */
                 }
