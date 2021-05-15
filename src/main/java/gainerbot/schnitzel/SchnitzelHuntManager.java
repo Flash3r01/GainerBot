@@ -29,6 +29,7 @@ public class SchnitzelHuntManager {
         File[] folders = basePath.toFile().listFiles(File::isDirectory);
         for(File userFolder : folders){
             String id = userFolder.toPath().getFileName().toString();
+            if(id.startsWith(".")) continue;
             instances.put(id, SchnitzelHuntInstance.fromBaseFile(userFolder));
         }
 
