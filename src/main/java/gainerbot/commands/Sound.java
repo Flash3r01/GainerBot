@@ -98,7 +98,6 @@ public class Sound extends BaseCommand {
         for(File file : files){
             String name = file.toPath().getFileName().toString();
             if(name.endsWith(".md")) continue;
-            //name = name.substring(0, name.lastIndexOf('.'));
             names.add(name);
         }
         soundNames = names.toArray(new String[0]);
