@@ -7,6 +7,9 @@ remote.allowAnyHosts = true
 
 node {
     //TODO Send mails on fail.
+    stage('Checkout') {
+        scm checkout
+    }
     stage('Build') {
         echo 'Building...'
         sh 'chmod u+x gradlew'
