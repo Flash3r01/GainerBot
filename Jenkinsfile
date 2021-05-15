@@ -8,7 +8,7 @@ remote.allowAnyHosts = true
 node {
     //TODO Send mails on fail.
     stage('Checkout') {
-        scm checkout
+        checkout scm
     }
     stage('Build') {
         echo 'Building...'
