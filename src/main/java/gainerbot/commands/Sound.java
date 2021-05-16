@@ -40,10 +40,14 @@ public class Sound extends BaseCommand {
                 }
                 String soundPath = optionsToSoundPath(arguments);
                 if(soundPath == null){
+                    event.getChannel().sendMessage("Sounds have to be requested one at a time :(.").queue();
+                    return;
+                }
+                else if(soundPath.equals("")){
                     event.getChannel().sendMessage("Sound \""+arguments[0]+"\" has not been found.").queue();
                     return;
                 }
-                event.getMessage().delete().queue();
+                //event.getMessage().delete().queue();
                 gainerbot.audio.AudioManager.getAudioManager().loadAudio(soundPath, event.getChannel());
                 connectToChannel(voiceState.getChannel());
             }else{
@@ -75,17 +79,22 @@ public class Sound extends BaseCommand {
         audioManager.openAudioConnection(channel);
     }
 
+    /**
+     * Parses options to a path to the requested soundfile.
+     * @param options The name of the file to play. Should only contain one name.
+     * @return The path to the requested soundfile as a string. Empty String if file not found. Null if given array has more than one element.
+     */
     private String optionsToSoundPath(String[] options){
-        String ret = null;
-        if(options.length >= 1){
+        if(options.length == 1){
             for(String name : soundNames){
                 //TODO Fix the startsWith comparison.
                 if(name.toLowerCase().startsWith(options[0].toLowerCase())){
-                    ret = soundBase.resolve(name).toString();
+                    Path filePath = soundBase.resolve(name);
+                    return filePath.toFile().exists() ? filePath.toString() : "";
                 }
             }
         }
-        return ret;
+        return null;
     }
 
     private void initSound(){

@@ -36,7 +36,19 @@ public class AudioManager {
         playerManager.loadItem(path, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
-                logChannel.sendMessage("Playing: " + track.getInfo().title).queue();
+                // Assemble response to the user.
+                String playingMessage = "Playing `";
+                if(!track.getInfo().title.equals("Unknown title")){
+                    playingMessage += track.getInfo().title + "`";
+                }else{
+                    playingMessage += track.getIdentifier() + "`";
+                }
+                if(!track.getInfo().author.equals("Unknown author")){
+                    playingMessage += " by `" + track.getInfo().author + "`";
+                }
+                playingMessage += " | Length: " + Math.floorDiv(track.getDuration(), 1000);
+
+                logChannel.sendMessage(playingMessage).queue();
                 player.playTrack(track);
             }
 
