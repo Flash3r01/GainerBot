@@ -10,6 +10,8 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.entities.MessageChannel;
 
+import java.nio.file.Paths;
+
 public class AudioManager {
     private static AudioManager instance = null;
 
@@ -37,16 +39,16 @@ public class AudioManager {
             @Override
             public void trackLoaded(AudioTrack track) {
                 // Assemble response to the user.
-                String playingMessage = "Playing `";
+                String playingMessage = ":musical_note: Playing `";
                 if(!track.getInfo().title.equals("Unknown title")){
                     playingMessage += track.getInfo().title + "`";
                 }else{
-                    playingMessage += track.getIdentifier() + "`";
+                    playingMessage += Paths.get(track.getIdentifier()).getFileName() + "`";
                 }
-                if(!track.getInfo().author.equals("Unknown author")){
+                if(!track.getInfo().author.equals("Unknown artist")){
                     playingMessage += " by `" + track.getInfo().author + "`";
                 }
-                playingMessage += " | Length: " + Math.floorDiv(track.getDuration(), 1000);
+                playingMessage += " | Length: " + Math.floorDiv(track.getDuration(), 1000) + "s. :musical_note:";
 
                 logChannel.sendMessage(playingMessage).queue();
                 player.playTrack(track);
