@@ -4,7 +4,9 @@ import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
+import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.source.local.LocalAudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -17,14 +19,17 @@ public class AudioManager {
 
     private final AudioPlayerManager playerManager;
     private final AudioPlayer player;
+    private final TrackScheduler trackScheduler;
 
 
     private AudioManager(){
         playerManager = new DefaultAudioPlayerManager();
-        playerManager.registerSourceManager(new LocalAudioSourceManager());
+        AudioSourceManagers.registerLocalSource(playerManager);
+        AudioSourceManagers.registerRemoteSources(playerManager);
 
         player = playerManager.createPlayer();
-        player.addListener(new TrackScheduler());
+        trackScheduler = new TrackScheduler(player);
+        player.addListener(trackScheduler);
     }
 
     public static AudioManager getAudioManager(){
@@ -34,12 +39,12 @@ public class AudioManager {
         return instance;
     }
 
-    public void loadAudio(String path, MessageChannel logChannel){
+    public void loadAudio(String path, MessageChannel logChannel, boolean priority){
         playerManager.loadItem(path, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
                 // Assemble response to the user.
-                String playingMessage = ":musical_note: Playing `";
+                String playingMessage = ":musical_note: Queued `";
                 if(!track.getInfo().title.equals("Unknown title")){
                     playingMessage += track.getInfo().title + "`";
                 }else{
@@ -50,24 +55,45 @@ public class AudioManager {
                 }
                 playingMessage += " | Length: " + Math.floorDiv(track.getDuration(), 1000) + "s. :musical_note:";
 
-                logChannel.sendMessage(playingMessage).queue();
-                player.playTrack(track);
+
+                if(priority){
+                    trackScheduler.play(track);
+                    logChannel.sendMessage(playingMessage).queue();
+                }else{
+                    if(trackScheduler.queue(track)){
+                        logChannel.sendMessage(playingMessage).queue();
+                    }else{
+                        logChannel.sendMessage("Was not able to enqueue the requested track :(").queue();
+                    }
+                }
             }
 
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
-                logChannel.sendMessage("Playing Playlist: " + playlist.getName()).queue();
-                //TODO Play the playlist.
+                StringBuilder replyStringBuilder = new StringBuilder();
+                if (playlist.isSearchResult()){
+                    replyStringBuilder.append("Playlist created by search results.\n");
+                }
+
+                replyStringBuilder.append("Starting to play playlist: ").append(playlist.getName()).append("\n");
+                int i = 1;
+                for(AudioTrack track : playlist.getTracks()){
+                    replyStringBuilder.append("Track ").append(i).append(": `").append(track.getInfo().title).append("`\n");
+                    trackScheduler.queue(track);
+                    i++;
+                }
+
+                logChannel.sendMessage(replyStringBuilder.toString()).queue();
             }
 
             @Override
             public void noMatches() {
-                logChannel.sendMessage("Audio with identifier \"" + path + "\" has not been found.").queue();
+                logChannel.sendMessage("Audio \"" + path + "\" has not been found.").queue();
             }
 
             @Override
             public void loadFailed(FriendlyException exception) {
-                logChannel.sendMessage("Encountered an error while loading your sound: " + exception.toString() + "\nIdentifier: " + path).queue();
+                logChannel.sendMessage("Encountered an error while loading your sound: " + exception.getMessage() + "\n" + exception.toString() + "\nIdentifier: " + path).queue();
             }
         });
     }
