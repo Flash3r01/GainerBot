@@ -1,5 +1,6 @@
 package gainerbot;
 
+import gainerbot.audio.AudioManager;
 import gainerbot.patterns.Loiny;
 import gainerbot.schnitzel.SchnitzelHuntManager;
 import gainerbot.services.HttpService;
@@ -115,7 +116,10 @@ public class GainerBot extends ListenerAdapter {
             }
         }
 
-        if(foundSelf) channel.getGuild().getAudioManager().closeAudioConnection();
+        if(foundSelf) {
+            channel.getGuild().getAudioManager().closeAudioConnection();
+            AudioManager.getAudioManager().getTrackScheduler().stop();
+        }
     }
 
     @Override

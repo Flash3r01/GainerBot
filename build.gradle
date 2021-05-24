@@ -12,7 +12,9 @@ version null
 repositories {
     mavenCentral()
     jcenter()
-    //maven { url 'https://dl.bintray.com/natanbc/maven' }
+    maven {
+        url 'https://m2.dv8tion.net/releases'
+    }
 }
 
 dependencies {
@@ -20,9 +22,8 @@ dependencies {
     implementation 'net.dv8tion:JDA:4.2.0_221'
     // https://mvnrepository.com/artifact/org.json/json
     implementation group: 'org.json', name: 'json', version: '20200518'
-    implementation 'com.sedmelluq:lavaplayer:1.3.65'
+    implementation 'com.sedmelluq:lavaplayer:1.3.75'
     //This library does not fix the lavaplayer natives
-    //implementation 'com.github.natanbc:lp-cross:0.1.1'
 }
 
 shadowJar {

@@ -7,6 +7,9 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import jdk.jshell.spi.ExecutionControl;
 
+import java.util.Arrays;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -54,6 +57,7 @@ public class TrackScheduler extends AudioEventAdapter {
      * Stops the currently playing track. Also clears the queue.
      */
     public void stop(){
+        player.setPaused(false);
         player.stopTrack();
     }
 
@@ -102,6 +106,7 @@ public class TrackScheduler extends AudioEventAdapter {
     public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
         // An already playing track threw an exception (track end event will still be received separately)
         //TODO Send a message to inform someone.
+        System.out.println("EXCEPTION: Track stopped: " + track.getInfo().title + "\n Exception message: " + exception.getMessage() + "\n Stacktrace: " + Arrays.toString(exception.getStackTrace()).replaceAll(", ", "\n  ") + "\n Cause: " + exception.getCause());
         loadNextTrack();
     }
 
@@ -109,6 +114,7 @@ public class TrackScheduler extends AudioEventAdapter {
     public void onTrackStuck(AudioPlayer player, AudioTrack track, long thresholdMs) {
         // Audio track has been unable to provide us any audio, might want to just start a new track
         //TODO Send a message to inform someone.
+        System.out.println("Track stuck! Title: " + track.getInfo().title + "\nURI: " + track.getInfo().uri);
         loadNextTrack();
     }
 

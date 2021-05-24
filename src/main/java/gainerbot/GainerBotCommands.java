@@ -1,6 +1,7 @@
 package gainerbot;
 
 import gainerbot.commands.*;
+import gainerbot.commands.audio.*;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -33,6 +34,11 @@ public class GainerBotCommands {
         commands.add(new Surprise());
         commands.add(new Pog());
         commands.add(new Status());
+        commands.add(new Play());
+        commands.add(new Skip());
+        commands.add(new Stop());
+        commands.add(new Pause());
+        commands.add(new Resume());
 
         //Extract all the commandNames.
         for(BaseCommand command : commands){

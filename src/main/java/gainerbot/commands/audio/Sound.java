@@ -1,7 +1,9 @@
-package gainerbot.commands;
+package gainerbot.commands.audio;
 
 import gainerbot.GainerBotConfiguration;
+import gainerbot.audio.AudioHelper;
 import gainerbot.audio.AudioPlayerSendHandler;
+import gainerbot.commands.BaseCommand;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
@@ -28,33 +30,25 @@ public class Sound extends BaseCommand {
 
     @Override
     public void execute(@Nonnull MessageReceivedEvent event, HashMap<String, String> options, String[] arguments) {
-        Member member = event.getMember();
-        if(member != null){
-            GuildVoiceState voiceState = member.getVoiceState();
-
-            if(voiceState != null && voiceState.inVoiceChannel()){
-                if(arguments.length < 1){
-                    showAvailableSounds(event.getChannel());
-                    event.getMessage().delete().queue();
-                    return;
-                }
-                String soundPath = optionsToSoundPath(arguments);
-                if(soundPath == null){
-                    event.getChannel().sendMessage("Sounds have to be requested one at a time :(.").queue();
-                    return;
-                }
-                else if(soundPath.equals("")){
-                    event.getChannel().sendMessage("Sound \""+arguments[0]+"\" has not been found.").queue();
-                    return;
-                }
-                //event.getMessage().delete().queue();
-                gainerbot.audio.AudioManager.getAudioManager().loadAudio(soundPath, event.getChannel(), true);
-                connectToChannel(voiceState.getChannel());
-            }else{
-                event.getChannel().sendMessage("You have to be in a Voice Channel to use this command.").queue();
+        if(AudioHelper.checkAudioRequirementsAndNotify(event.getMember(), event.getChannel())){
+            if(arguments.length < 1){
+                showAvailableSounds(event.getChannel());
+                event.getMessage().delete().queue();
+                return;
             }
-        }else{
-            event.getChannel().sendMessage("You have to use this command in a Server.").queue();
+            String soundPath = optionsToSoundPath(arguments);
+            if(soundPath == null){
+                event.getChannel().sendMessage("Sounds have to be requested one at a time :(.").queue();
+                return;
+            }
+            else if(soundPath.equals("")){
+                event.getChannel().sendMessage("Sound \""+arguments[0]+"\" has not been found.").queue();
+                return;
+            }
+
+            gainerbot.audio.AudioManager.getAudioManager().loadAudio(soundPath, event.getChannel(), true);
+            //noinspection ConstantConditions
+            AudioHelper.connectToChannel(event.getMember().getVoiceState().getChannel());
         }
     }
 
@@ -67,16 +61,6 @@ public class Sound extends BaseCommand {
             builder.append("\n");
         }
         channel.sendMessage(builder.toString()).queue();
-    }
-
-    private void connectToChannel(VoiceChannel channel){
-        if(channel == null) return;
-
-        AudioManager audioManager = channel.getGuild().getAudioManager();
-        AudioPlayerSendHandler sendHandler = new AudioPlayerSendHandler(gainerbot.audio.AudioManager.getAudioManager().getPlayer());
-
-        audioManager.setSendingHandler(sendHandler);
-        audioManager.openAudioConnection(channel);
     }
 
     /**
