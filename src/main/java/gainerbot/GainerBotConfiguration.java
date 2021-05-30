@@ -15,5 +15,8 @@ public enum GainerBotConfiguration {
     public static Path basePath = Paths.get(System.getProperty("user.dir"), "data");
 
 
+    public static String databaseName = "gainerbotDatabase";
+
+
     public static Random random = new Random();
 }
