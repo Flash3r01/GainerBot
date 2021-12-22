@@ -4,6 +4,9 @@ import gainerbot.audio.AudioManager;
 import gainerbot.patterns.Loiny;
 import gainerbot.schnitzel.SchnitzelHuntManager;
 import gainerbot.services.HttpService;
+import gainerbot.slashCommand.SlashCommandManager;
+import gainerbot.slashCommand.commands.*;
+import gainerbot.slashCommand.commands.audio.Play;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -24,6 +27,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class GainerBot extends ListenerAdapter {
     public static JDA jdaInstance;
@@ -31,6 +36,7 @@ public class GainerBot extends ListenerAdapter {
     public static GainerBotCommands commandManager;
     public static GainerBotPatterns patternManager;
     public static SchnitzelHuntManager schnitzelHuntManager;
+    public static ExecutorService executorService = Executors.newFixedThreadPool(4);
 
     public static final HttpService httpService = new HttpService();
 
@@ -43,7 +49,12 @@ public class GainerBot extends ListenerAdapter {
         //TODO read all the configuration at once.
         String token = "";
         try {
-            Path path = Paths.get(GainerBotConfiguration.basePath.toString(), "token.txt");
+            Path path;
+            if (!GainerBotConfiguration.isDebug){
+                path = Paths.get(GainerBotConfiguration.basePath.toString(), "token.txt");
+            }else {
+                path = Paths.get(GainerBotConfiguration.basePath.toString(), "debugToken.txt");
+            }
             BufferedReader reader = new BufferedReader(new FileReader(path.toFile()));
             token = reader.readLine();
         } catch (FileNotFoundException e) {
@@ -79,23 +90,61 @@ public class GainerBot extends ListenerAdapter {
             System.out.println("A needed Thread was interrupted.");
         }
 
-        commandManager = new GainerBotCommands();
+        //commandManager = new GainerBotCommands();
         patternManager = new GainerBotPatterns();
         schnitzelHuntManager = SchnitzelHuntManager.getSchnitzelManager();
+        initSlashCommands();
 
         for(Guild guild : jdaInstance.getGuilds()){
-            guild.loadMembers().onSuccess(list -> System.out.println("Members loaded"));
+            guild.loadMembers().onSuccess(list -> System.out.println("Members loaded for guild: " + guild.getName()));
         }
         System.out.println("GainerBot started.");
+
+        Runtime.getRuntime().addShutdownHook(new Thread(new ShutdownHook()));
+    }
+
+    private static void initSlashCommands() {
+        SlashCommandManager slashManager = new SlashCommandManager();
+        if (!GainerBotConfiguration.isDebug){
+            slashManager.addCommand(new B());
+            slashManager.addCommand(new Fuck());
+            slashManager.addCommand(new Google());
+            slashManager.addCommand(new Help());
+            slashManager.addCommand(new OwO());
+            slashManager.addCommand(new Pasta());
+            slashManager.addCommand(new Pattern());
+            slashManager.addCommand(new Play());
+            slashManager.addCommand(new Status());
+            slashManager.addCommand(new Stonks());
+            slashManager.addCommand(new Surprise());
+            slashManager.addCommand(new Watch2Gether());
+            slashManager.registerGlobalCommands(jdaInstance);
+        }
+        else{
+            //slashManager.addCommand(new Test());
+            slashManager.addCommand(new B());
+            slashManager.addCommand(new Fuck());
+            slashManager.addCommand(new Google());
+            slashManager.addCommand(new Help());
+            slashManager.addCommand(new OwO());
+            slashManager.addCommand(new Pasta());
+            slashManager.addCommand(new Pattern());
+            slashManager.addCommand(new Play());
+            slashManager.addCommand(new Status());
+            slashManager.addCommand(new Stonks());
+            slashManager.addCommand(new Surprise());
+            slashManager.addCommand(new Watch2Gether());
+            slashManager.registerGuildCommands(jdaInstance.getGuildById(GainerBotConfiguration.debugGuildId));
+        }
     }
 
     @Override
     public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
         if(!event.getMessage().isFromType(ChannelType.PRIVATE)) {
-            commandManager.processCommandMessage(event);
+            if (commandManager != null) commandManager.processCommandMessage(event);
             patternManager.applyPatterns(event);
         }else{
-            schnitzelHuntManager.handlePrivateMessage(event);
+            if (schnitzelHuntManager != null) schnitzelHuntManager.handlePrivateMessage(event);
         }
     }
 
@@ -104,7 +153,7 @@ public class GainerBot extends ListenerAdapter {
         //TODO Is this necessary?
         super.onGuildVoiceUpdate(event);
 
-        VoiceChannel channel = event.getChannelLeft();
+        AudioChannel channel = event.getChannelLeft();
         if(channel == null) return;
         List<Member> membersInChannel = channel.getMembers();
         boolean foundSelf = false;

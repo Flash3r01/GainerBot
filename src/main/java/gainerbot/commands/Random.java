@@ -3,10 +3,10 @@ package gainerbot.commands;
 import gainerbot.GainerBotConfiguration;
 import gainerbot.permissions.IChannelPermission;
 import net.dv8tion.jda.api.OnlineStatus;
+import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.IMentionable;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import javax.annotation.Nonnull;
@@ -44,7 +44,7 @@ public class Random extends BaseCommand {
                     Member member = event.getMember();
                     if(member != null){
                         //TODO Test if uncached members are also included.
-                        VoiceChannel channel = member.getVoiceState().getChannel();
+                        AudioChannel channel = member.getVoiceState().getChannel();
                         if(channel != null){
                             List<Member> members = channel.getMembers();
                             event.getChannel().sendMessage("Congratz! " + members.get(r.nextInt(members.size())).getAsMention() + " was chosen randomly.").queue();

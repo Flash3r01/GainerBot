@@ -1,11 +1,13 @@
 package gainerbot.audio;
 
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.source.local.LocalAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
+import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.nio.file.Paths;
@@ -16,7 +18,7 @@ public class AudioHelper {
         if(member != null){
             GuildVoiceState voiceState = member.getVoiceState();
 
-            if(voiceState != null && voiceState.inVoiceChannel()){
+            if(voiceState != null && voiceState.inAudioChannel()){
                 return true;
             }else{
                 channel.sendMessage("You have to be in a Voice Channel to use this command.").queue();
@@ -29,11 +31,11 @@ public class AudioHelper {
         }
     }
 
-    public static void connectToChannel(VoiceChannel channel){
-        if(channel == null) return;
+    public static void connectToChannel(AudioChannel channel, AudioPlayer audioPlayer){
+        if (channel == null) return;
 
         AudioManager audioManager = channel.getGuild().getAudioManager();
-        AudioPlayerSendHandler sendHandler = new AudioPlayerSendHandler(gainerbot.audio.AudioManager.getAudioManager().getPlayer());
+        AudioPlayerSendHandler sendHandler = new AudioPlayerSendHandler(audioPlayer);
 
         audioManager.setSendingHandler(sendHandler);
         audioManager.openAudioConnection(channel);
@@ -52,13 +54,39 @@ public class AudioHelper {
             playingMessage += " by `" + track.getInfo().author + "`";
         }
         if(track.getInfo().isStream) {
-            playingMessage += " | Stream";
+            playingMessage += " (Stream)";
         }
         else{
-            playingMessage += " | Length: " + Math.floorDiv(track.getDuration(), 1000) + "s.";
+            playingMessage += " (Length: " + Math.floorDiv(track.getDuration(), 1000) + "s.)";
         }
         playingMessage += " :musical_note:";
 
         return playingMessage;
+    }
+
+    public static String toTrackInfoString(AudioTrack track){
+        AudioTrackInfo info = track.getInfo();
+        StringBuilder builder = new StringBuilder();
+        builder.append('`');
+
+        if (info.title.equals("Unknown title") && track.getSourceManager() instanceof LocalAudioSourceManager){
+            builder.append(Paths.get(track.getIdentifier()).getFileName());
+        }else{
+            builder.append(info.title);
+        }
+        builder.append("` - `");
+
+        builder.append(info.author)
+                .append("`  (");
+
+        if (info.isStream){
+            builder.append("Stream");
+        }else{
+            builder.append(Math.floorDiv(track.getDuration(), 1000))
+                    .append('s');
+        }
+        builder.append(')');
+
+        return builder.toString();
     }
 }
