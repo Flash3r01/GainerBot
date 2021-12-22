@@ -2,14 +2,10 @@ package gainerbot.commands.audio;
 
 import gainerbot.GainerBotConfiguration;
 import gainerbot.audio.AudioHelper;
-import gainerbot.audio.AudioPlayerSendHandler;
+import gainerbot.audio.AudioManager;
 import gainerbot.commands.BaseCommand;
-import net.dv8tion.jda.api.entities.GuildVoiceState;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.managers.AudioManager;
 
 import javax.annotation.Nonnull;
 import java.io.File;
@@ -48,7 +44,7 @@ public class Sound extends BaseCommand {
 
             gainerbot.audio.AudioManager.getAudioManager().loadAudio(soundPath, event.getChannel(), true);
             //noinspection ConstantConditions
-            AudioHelper.connectToChannel(event.getMember().getVoiceState().getChannel());
+            AudioHelper.connectToChannel(event.getMember().getVoiceState().getChannel(), AudioManager.getAudioManager().getPlayer());
         }
     }
 

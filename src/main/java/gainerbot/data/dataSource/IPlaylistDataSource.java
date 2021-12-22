@@ -4,7 +4,7 @@ import gainerbot.data.Playlist;
 import gainerbot.data.PlaylistEntry;
 
 public interface IPlaylistDataSource extends IDataSource {
-    boolean createPlaylist(String name);
+    boolean createPlaylist(String name, String creator);
     boolean deletePlaylist(Playlist playlist);
 
     boolean addPlaylistEntry(Playlist playlist, PlaylistEntry entry);

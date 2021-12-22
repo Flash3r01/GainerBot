@@ -28,7 +28,7 @@ public class Play extends BaseCommand {
             }
 
             //noinspection ConstantConditions
-            AudioHelper.connectToChannel(event.getMember().getVoiceState().getChannel());
+            AudioHelper.connectToChannel(event.getMember().getVoiceState().getChannel(), AudioManager.getAudioManager().getPlayer());
         }
     }
 }
