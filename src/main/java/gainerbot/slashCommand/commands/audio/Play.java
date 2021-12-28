@@ -1,7 +1,7 @@
 package gainerbot.slashCommand.commands.audio;
 
+import gainerbot.audio.audioControllerThread.AudioControllerThreadManager;
 import gainerbot.slashCommand.BaseSlashCommand;
-import gainerbot.slashCommand.commands.audio.audioControllerMessage.AudioControllerMessageManager;
 import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
@@ -38,11 +38,11 @@ public class Play extends BaseSlashCommand {
             return;
         }
 
-        AudioControllerMessageManager.play(identifier, audioChannel, event.getTextChannel(), (msg) -> event.getHook().sendMessage(msg).setEphemeral(true).queue());
+        AudioControllerThreadManager.play(identifier, audioChannel, event.getTextChannel(), (msg) -> event.getHook().sendMessage(msg).setEphemeral(true).queue());
     }
 
     @Override
     public void onButtonClick(@Nonnull ButtonClickEvent event) {
-        AudioControllerMessageManager.handleButtonClicked(event);
+        AudioControllerThreadManager.handleButtonClicked(event);
     }
 }

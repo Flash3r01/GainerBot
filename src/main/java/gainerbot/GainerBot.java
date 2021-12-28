@@ -1,14 +1,14 @@
 package gainerbot;
 
 import gainerbot.audio.AudioManager;
+import gainerbot.audio.audioControllerThread.AudioControllerThread;
+import gainerbot.audio.audioControllerThread.AudioControllerThreadManager;
 import gainerbot.patterns.Loiny;
 import gainerbot.schnitzel.SchnitzelHuntManager;
 import gainerbot.services.HttpService;
 import gainerbot.slashCommand.SlashCommandManager;
 import gainerbot.slashCommand.commands.*;
 import gainerbot.slashCommand.commands.audio.Play;
-import gainerbot.slashCommand.commands.audio.audioControllerMessage.AudioControllerMessage;
-import gainerbot.slashCommand.commands.audio.audioControllerMessage.AudioControllerMessageManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -167,8 +167,8 @@ public class GainerBot extends ListenerAdapter {
         if(foundSelf) {
             channel.getGuild().getAudioManager().closeAudioConnection();
             AudioManager.getAudioManager().getTrackScheduler().stop();
-            AudioControllerMessage controllerMessage = AudioControllerMessageManager.getExistingAudioControllerMessage(event.getGuild().getId());
-            if (controllerMessage != null) controllerMessage.stop();
+            AudioControllerThread controllerThread = AudioControllerThreadManager.getExistingAudioControllerThread(event.getGuild().getId());
+            if (controllerThread != null) controllerThread.stop();
         }
     }
 
