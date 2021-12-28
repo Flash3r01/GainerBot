@@ -6,6 +6,7 @@ import gainerbot.audio.audioControllerThread.AudioControllerThreadManager;
 import gainerbot.patterns.Loiny;
 import gainerbot.schnitzel.SchnitzelHuntManager;
 import gainerbot.services.HttpService;
+import gainerbot.slashCommand.SlashCommandCollection;
 import gainerbot.slashCommand.SlashCommandManager;
 import gainerbot.slashCommand.commands.*;
 import gainerbot.slashCommand.commands.audio.Play;
@@ -106,37 +107,28 @@ public class GainerBot extends ListenerAdapter {
     }
 
     private static void initSlashCommands() {
-        SlashCommandManager slashManager = new SlashCommandManager();
+        SlashCommandCollection globalCommandCollection = new SlashCommandCollection();
         if (!GainerBotConfiguration.isDebug){
-            slashManager.addCommand(new B());
-            slashManager.addCommand(new Fuck());
-            slashManager.addCommand(new Google());
-            slashManager.addCommand(new Help());
-            slashManager.addCommand(new OwO());
-            slashManager.addCommand(new Pasta());
-            slashManager.addCommand(new Pattern());
-            slashManager.addCommand(new Play());
-            slashManager.addCommand(new Status());
-            slashManager.addCommand(new Stonks());
-            slashManager.addCommand(new Surprise());
-            slashManager.addCommand(new Watch2Gether());
-            slashManager.registerGlobalCommands(jdaInstance);
+            globalCommandCollection.addCommand(new B());
+            globalCommandCollection.addCommand(new Fuck());
+            globalCommandCollection.addCommand(new Google());
+            globalCommandCollection.addCommand(new Help());
+            globalCommandCollection.addCommand(new OwO());
+            globalCommandCollection.addCommand(new Pasta());
+            globalCommandCollection.addCommand(new Pattern());
+            globalCommandCollection.addCommand(new Play());
+            globalCommandCollection.addCommand(new Status());
+            globalCommandCollection.addCommand(new Stonks());
+            globalCommandCollection.addCommand(new Surprise());
+            globalCommandCollection.addCommand(new Watch2Gether());
+            SlashCommandManager.registerGlobalCommands(jdaInstance, globalCommandCollection);
         }
         else{
-            //slashManager.addCommand(new Test());
-            slashManager.addCommand(new B());
-            slashManager.addCommand(new Fuck());
-            slashManager.addCommand(new Google());
-            slashManager.addCommand(new Help());
-            slashManager.addCommand(new OwO());
-            slashManager.addCommand(new Pasta());
-            slashManager.addCommand(new Pattern());
-            slashManager.addCommand(new Play());
-            slashManager.addCommand(new Status());
-            slashManager.addCommand(new Stonks());
-            slashManager.addCommand(new Surprise());
-            slashManager.addCommand(new Watch2Gether());
-            slashManager.registerGuildCommands(jdaInstance.getGuildById(GainerBotConfiguration.debugGuildId));
+            globalCommandCollection.addCommand(new Help());
+            globalCommandCollection.addCommand(new Pattern());
+            globalCommandCollection.addCommand(new Play());
+            globalCommandCollection.addCommand(new Status());
+            SlashCommandManager.registerGuildCommands(jdaInstance.getGuildById(GainerBotConfiguration.debugGuildId), globalCommandCollection);
         }
     }
 
