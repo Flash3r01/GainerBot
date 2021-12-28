@@ -4,7 +4,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 
 public abstract class SlashCommandManagerState {
-    protected SlashCommandManager manager;
+    protected final SlashCommandManager manager;
 
     public abstract boolean addCommand(BaseSlashCommand toAdd);
     public abstract boolean registerGlobalCommands(JDA jdaInstance);

@@ -5,7 +5,7 @@ Simple Answer: This is a little game, that can be created for a specific
 user.
 
 
-Schnitzel gives you the ability to create a small minigame for a user. You
+Schnitzel gives you the ability to create a mini game for a user. You
 can easily create multiple "Schnitzels" a user has to find, to get to a
 reward. Schnitzels will be found by a defined phrase that the user has to
 input.  
@@ -27,7 +27,7 @@ There are 2 files that shape the SchnitzelHunt:
 This file defines the Schnitzels that the User can find. Each Schnitzel
 consists of: 
 - **target**:           The phrase the user has to find
-- **response**:         The response from the bot, if the target is sent.
+- **response**:         The response from the bot, if the target has been sent.
     - Special characters:
     - \n - line break
     - \file:*filename* - specifies a file to be sent. (In this folder)

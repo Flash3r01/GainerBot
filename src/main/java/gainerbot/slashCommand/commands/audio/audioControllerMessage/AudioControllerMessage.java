@@ -208,8 +208,4 @@ public class AudioControllerMessage {
 
         return builder.build();
     }
-
-    public TrackScheduler getTrackScheduler() {
-        return trackScheduler;
-    }
 }

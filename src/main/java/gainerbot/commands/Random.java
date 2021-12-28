@@ -44,6 +44,7 @@ public class Random extends BaseCommand {
                     Member member = event.getMember();
                     if(member != null){
                         //TODO Test if uncached members are also included.
+                        //noinspection ConstantConditions
                         AudioChannel channel = member.getVoiceState().getChannel();
                         if(channel != null){
                             List<Member> members = channel.getMembers();

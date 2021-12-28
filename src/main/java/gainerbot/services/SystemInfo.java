@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//TODO Has not been tested on anything else than a amd64 Windows machine.
 //TODO make this more performant. E.g. non-changing Values are queried multiple times.
 public class SystemInfo {
     private static final String osName;
@@ -128,7 +127,7 @@ public class SystemInfo {
         if(!isWindows()) throw new IllegalStateException("Tried to call \"Systeminfo\" command on a non Windows machine.");
         String[] ret = new String[positions.length];
 
-        String reply = "";
+        String reply;
         try {
             Process p = runtime.exec("SYSTEMINFO");
             BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));

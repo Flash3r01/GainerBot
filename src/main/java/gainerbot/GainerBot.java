@@ -7,6 +7,8 @@ import gainerbot.services.HttpService;
 import gainerbot.slashCommand.SlashCommandManager;
 import gainerbot.slashCommand.commands.*;
 import gainerbot.slashCommand.commands.audio.Play;
+import gainerbot.slashCommand.commands.audio.audioControllerMessage.AudioControllerMessage;
+import gainerbot.slashCommand.commands.audio.audioControllerMessage.AudioControllerMessageManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -150,9 +152,6 @@ public class GainerBot extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceUpdate(@Nonnull GuildVoiceUpdateEvent event) {
-        //TODO Is this necessary?
-        super.onGuildVoiceUpdate(event);
-
         AudioChannel channel = event.getChannelLeft();
         if(channel == null) return;
         List<Member> membersInChannel = channel.getMembers();
@@ -168,20 +167,21 @@ public class GainerBot extends ListenerAdapter {
         if(foundSelf) {
             channel.getGuild().getAudioManager().closeAudioConnection();
             AudioManager.getAudioManager().getTrackScheduler().stop();
+            AudioControllerMessage controllerMessage = AudioControllerMessageManager.getExistingAudioControllerMessage(event.getGuild().getId());
+            if (controllerMessage != null) controllerMessage.stop();
         }
     }
 
     @Override
     public void onMessageReactionAdd(@Nonnull MessageReactionAddEvent event) {
-        //TODO Is this necessary?
-        super.onMessageReactionAdd(event);
-
         //If X on Loiny disable Loiny
         Loiny myLoiny = ((Loiny) patternManager.getPatternByName("Loiny"));
+        //noinspection ConstantConditions
         if(myLoiny.isActive()
                 && event.getReactionEmote().isEmoji()
                 && event.getReactionEmote().getEmoji().equals(myLoiny.disableEmoji)
-                && event.getMessageId().equals(myLoiny.lastMessageID)){
+                && event.getMessageId().equals(myLoiny.lastMessageID)
+                && !event.getMember().getUser().isBot()){
             myLoiny.setActive(false);
         }
     }

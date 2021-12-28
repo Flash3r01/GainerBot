@@ -81,4 +81,8 @@ public class AudioControllerMessageManager {
         messageTracker.remove(guildId);
         return true;
     }
+
+    public static AudioControllerMessage getExistingAudioControllerMessage(String guildId){
+        return messageTracker.get(guildId);
+    }
 }
