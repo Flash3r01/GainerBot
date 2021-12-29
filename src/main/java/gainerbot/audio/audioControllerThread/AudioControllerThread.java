@@ -1,4 +1,4 @@
-package gainerbot.slashCommand.commands.audio.audioControllerMessage;
+package gainerbot.audio.audioControllerThread;
 
 import gainerbot.GainerBot;
 import gainerbot.audio.AudioHelper;
@@ -18,19 +18,19 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 //TODO Buttons/Interactive Messages should also get a System similar to SlashCommands.
-public class AudioControllerMessage {
+public class AudioControllerThread {
     private final String guildId;
     private final String channelId;
     private final TrackScheduler trackScheduler;
-    private final AudioControllerMessageUpdater updater;
+    private final AudioControllerThreadUpdater updater;
     private String threadId;
     private String messageId;
 
-    public AudioControllerMessage(String guildId, String channelId) {
+    public AudioControllerThread(String guildId, String channelId) {
         this.guildId = guildId;
         this.channelId = channelId;
         this.trackScheduler = TrackScheduler.fromPlayerManager(AudioManager.getAudioManager().getPlayerManager());
-        this.updater = new AudioControllerMessageUpdater(this);
+        this.updater = new AudioControllerThreadUpdater(this);
     }
 
 
@@ -38,7 +38,7 @@ public class AudioControllerMessage {
         trackScheduler.getAudioPlayer().addListener(updater);
         TrackSchedulerLoadHandler.loadAudio(identifier, trackScheduler, (msg, success) -> {
             if (success){
-                sendAudioControllerMessage(true);
+                sendAudioControllerThread(true);
                 //noinspection ConstantConditions
                 messageConsumer.accept(msg + "\n\nAudio controls are available in: "+GainerBot.jdaInstance.getGuildById(guildId).getThreadChannelById(threadId).getAsMention());
                 AudioHelper.connectToChannel(audioChannel, trackScheduler.getAudioPlayer());
@@ -72,18 +72,18 @@ public class AudioControllerMessage {
 
     public void stop(){
         trackScheduler.stop();
-        deleteAudioControllerMessage();
+        deleteAudioControllerThread();
         Guild guild = GainerBot.jdaInstance.getGuildById(guildId);
         if (guild == null) return;
         guild.getAudioManager().setSendingHandler(null);
-        if (!AudioControllerMessageManager.removeAudioControllerMessage(guildId)) System.out.println("INFO: Was not able to remove AudioControllerMessage for guild: "+guildId);
+        if (!AudioControllerThreadManager.removeAudioControllerThread(guildId)) System.out.println("INFO: Was not able to remove AudioControllerMessage for guild: "+guildId);
     }
 
     public void redraw(){
-        sendAudioControllerMessage(false);
+        sendAudioControllerThread(false);
     }
 
-    public void deleteAudioControllerMessage() {
+    public void deleteAudioControllerThread() {
         if (messageId == null && threadId == null) return;
         trackScheduler.getAudioPlayer().removeListener(updater);
         Guild guild = GainerBot.jdaInstance.getGuildById(guildId);
@@ -99,7 +99,7 @@ public class AudioControllerMessage {
         threadId = null;
     }
 
-    private void sendAudioControllerMessage(boolean createIfNeeded){
+    private void sendAudioControllerThread(boolean createIfNeeded){
         if (!createIfNeeded && messageId == null) return;
 
         Guild guild = GainerBot.jdaInstance.getGuildById(guildId);
@@ -133,7 +133,7 @@ public class AudioControllerMessage {
 
             TextChannel textChannel = guild.getTextChannelById(channelId);
             if (textChannel == null){
-                System.out.println("WARNING: AudioControllerMessage has a invalid channelId. Audio control message is not being sent. guildId: "+guildId+" channelId: "+channelId+".");
+                System.out.println("WARNING: AudioControllerMessage has an invalid channelId. Audio control message is not being sent. guildId: "+guildId+" channelId: "+channelId+".");
                 return;
             }
             ThreadChannel threadChannel = textChannel.createThreadChannel("Audio Player").complete();
@@ -207,9 +207,5 @@ public class AudioControllerMessage {
         ));
 
         return builder.build();
-    }
-
-    public TrackScheduler getTrackScheduler() {
-        return trackScheduler;
     }
 }

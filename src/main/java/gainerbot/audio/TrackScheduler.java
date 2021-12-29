@@ -66,8 +66,7 @@ public class TrackScheduler extends AudioEventAdapter {
     public void pause(boolean value){
         player.setPaused(value);
     }
-
-    //TODO Implement the Track Scheduler
+    
     @Override
     public void onPlayerPause(AudioPlayer player) {
         // Player was paused

@@ -3,5 +3,5 @@
 #### What command uses this data?
 + pasta
 
-#### What filetypes are supported?
+#### What file types are supported?
 + *.txt

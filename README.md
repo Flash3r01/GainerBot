@@ -4,7 +4,7 @@
 The GainerBot is a bot for Discord that intends to improve your Discord experience in silly ways. Interaction with it is mainly done through slash commands and *Patterns* that react to specific words.
 
 #### Who is the GainerBot for?
-The GainerBot started as a dumb idea for a private Discord server. But feel free to do whatever you want with it.
+The GainerBot started as a dumb idea for a private Discord server. Feel free to do whatever you want with it.
 
 #### How do I use the GainerBot?
 Using the GainerBot should be very simple. Just clone the repository from github and run `$ ./gradlew shadowJar` to compile the jar.  

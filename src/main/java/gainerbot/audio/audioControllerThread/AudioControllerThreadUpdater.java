@@ -1,36 +1,36 @@
-package gainerbot.slashCommand.commands.audio.audioControllerMessage;
+package gainerbot.audio.audioControllerThread;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 
-public class AudioControllerMessageUpdater extends AudioEventAdapter {
-    private final AudioControllerMessage controllerMessage;
+public class AudioControllerThreadUpdater extends AudioEventAdapter {
+    private final AudioControllerThread controllerThread;
 
-    public AudioControllerMessageUpdater(AudioControllerMessage controllerMessage) {
-        this.controllerMessage = controllerMessage;
+    public AudioControllerThreadUpdater(AudioControllerThread controllerThread) {
+        this.controllerThread = controllerThread;
     }
 
     @Override
     public void onPlayerPause(AudioPlayer player) {
-        controllerMessage.redraw();
+        controllerThread.redraw();
     }
 
     @Override
     public void onPlayerResume(AudioPlayer player) {
-        controllerMessage.redraw();
+        controllerThread.redraw();
     }
 
     @Override
     public void onTrackStart(AudioPlayer player, AudioTrack track) {
-        controllerMessage.redraw();
+        controllerThread.redraw();
     }
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         if (endReason == AudioTrackEndReason.STOPPED){
-            controllerMessage.deleteAudioControllerMessage();
+            controllerThread.deleteAudioControllerThread();
         }
     }
 }

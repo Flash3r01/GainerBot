@@ -1,8 +1,6 @@
 package gainerbot.data.dataSource;
 
-import com.mongodb.MongoCommandException;
 import com.mongodb.MongoException;
-import com.mongodb.MongoWriteConcernException;
 import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoCollection;
 import gainerbot.data.Playlist;

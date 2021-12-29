@@ -15,7 +15,6 @@ public class Watch2Gether extends BaseCommand {
         super(new String[]{"w2g", "watch2gether"}, "Sends the Link to our Watch2Gether-Room");
     }
 
-    //TODO Add an option to create a new Room?
     @Override
     public void execute(@Nonnull MessageReceivedEvent event, HashMap<String, String> options, String[] arguments) {
         getW2GChannel(event).sendMessage("Klick mich an: " + w2gUrl).queue();
