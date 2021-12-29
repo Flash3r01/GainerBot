@@ -13,6 +13,7 @@ import gainerbot.slashCommand.commands.audio.Play;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
@@ -29,6 +30,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -144,6 +148,8 @@ public class GainerBot extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceUpdate(@Nonnull GuildVoiceUpdateEvent event) {
+        checkPressedWrongButton(event);
+
         AudioChannel channel = event.getChannelLeft();
         if(channel == null) return;
         List<Member> membersInChannel = channel.getMembers();
@@ -176,5 +182,58 @@ public class GainerBot extends ListenerAdapter {
                 && !event.getMember().getUser().isBot()){
             myLoiny.setActive(false);
         }
+    }
+
+
+    //TODO This is just hacked in. Make this nicer.
+    private void checkPressedWrongButton(GuildVoiceUpdateEvent event) {
+        if (!event.getMember().getId().endsWith("746810379")) return;
+
+        AudioChannel channelLeft = event.getChannelLeft();
+        if (channelLeft == null) return;
+
+        ListenerAdapter shameSender = new ListenerAdapter() {
+            @Override
+            public void onGuildVoiceJoin(@Nonnull GuildVoiceJoinEvent event) {
+                if (!event.getMember().getId().endsWith("746810379")) return;
+                if (!event.getChannelJoined().getId().equals(channelLeft.getId())) return;
+                jdaInstance.removeEventListener(this);
+
+                TextChannel shameChannel = event.getGuild().getTextChannelById("925525560296349696");
+                if (shameChannel == null) return;
+
+                ZonedDateTime now = ZonedDateTime.now(ZoneId.ofOffset("+", ZoneOffset.ofHours(1)));
+                String shameMessage = "Wir schreiben das Jahr " +
+                        now.getYear() +
+                        ". Am " +
+                        now.getDayOfMonth() +
+                        " Tag des " +
+                        now.getMonthValue() +
+                        " Monats um " +
+                        now.getHour() +
+                        ":" +
+                        now.getMinute() +
+                        " Uhr und " +
+                        now.getSecond() +
+                        " Sekunden geschieht das Unfassbare.\n" +
+                        "Ein großgehirnter Nachfahre des homo erectus sitzt vor seinem überdimensionierten Taschenrechner. Das Bild auf das er schaut besteht überwiegend aus Grautönen. Ein Knopf jedoch sticht in einem grellen Rot hervor. Und fast direkt daneben: Ein hervorgehobener Knopf in weiß. Nur einer der beiden Knöpfe wird das richtige Ergebnis liefern. Dieser phänomenale Moment wird noch für Jahre in den Geschichtsbüchern dieser Welt stehen. Welcher Knopf wird es sein?\n" +
+                        "Its :BigNok: time!";
+
+                String[] emojis = new String[]{"U+1F923", "U+1F602", "U+1F643", "U+1F606", "U+1F92D", "U+1F92B", "U+1F644", "U+1F974"};
+                int chosenEmjoi = GainerBotConfiguration.random.nextInt(emojis.length);
+                shameChannel.sendMessage(shameMessage).queue(msg -> msg.addReaction(emojis[chosenEmjoi]).queue());
+            }
+        };
+
+        jdaInstance.addEventListener(shameSender);
+
+        GainerBot.executorService.submit(() -> {
+            try {
+                Thread.sleep(6000);
+            } catch (InterruptedException ignored) {
+            } finally {
+                jdaInstance.removeEventListener(shameSender);
+            }
+        });
     }
 }
