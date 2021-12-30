@@ -57,7 +57,8 @@ public class AudioHelper {
             playingMessage += " (Stream)";
         }
         else{
-            playingMessage += " (Length: " + Math.floorDiv(track.getDuration(), 1000) + "s.)";
+            long trackSeconds = Math.floorDiv(track.getDuration(), 1000);
+            playingMessage += "  " + secondsToHumanReadable(trackSeconds) + " min";
         }
         playingMessage += " :musical_note:";
 
@@ -88,5 +89,14 @@ public class AudioHelper {
         builder.append(')');
 
         return builder.toString();
+    }
+
+    private static String secondsToHumanReadable(long seconds){
+        long minutes = Math.floorDiv(seconds, 60);
+        long remainingSeconds = seconds % 60;
+        String padding = remainingSeconds < 10 ? "0" : "";
+
+        return minutes + ':' + padding + remainingSeconds;
+
     }
 }
